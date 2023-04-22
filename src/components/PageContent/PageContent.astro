@@ -1,15 +1,15 @@
 ---
 import type { MarkdownHeading } from 'astro';
-import MoreMenu from '../RightSidebar/MoreMenu.astro';
-import TableOfContents from '../RightSidebar/TableOfContents';
+import MoreMenu from '../RightSidebar/MoreMenu.astro'
+import TableOfContents from '../RightSidebar/TableOfContents.tsx'
 
 type Props = {
 	title: string;
 	headings: MarkdownHeading[];
 	githubEditUrl: string;
-};
+}
 
-const { title, headings, githubEditUrl } = Astro.props;
+const { title, headings, githubEditUrl } = Astro.props
 ---
 
 <article id="article" class="content">

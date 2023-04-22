@@ -1,18 +1,17 @@
 ---
-import { getLanguageFromURL, KNOWN_LANGUAGE_CODES } from '../../languages';
-import { SITE } from '../../consts';
-import AstroLogo from './AstroLogo.astro';
-import SkipToContent from './SkipToContent.astro';
-import SidebarToggle from './SidebarToggle';
-import LanguageSelect from './LanguageSelect';
-import Search from './Search';
+import { getLanguageFromURL, KNOWN_LANGUAGE_CODES } from '../../languages.ts'
+import { SITE } from '../../consts.ts'
+import SkipToContent from './SkipToContent.astro'
+import SidebarToggle from './SidebarToggle.tsx'
+import LanguageSelect from './LanguageSelect.tsx'
+import Search from './Search.tsx'
 
 type Props = {
 	currentPage: string;
-};
+}
 
-const { currentPage } = Astro.props;
-const lang = getLanguageFromURL(currentPage);
+const { currentPage } = Astro.props
+const lang = getLanguageFromURL(currentPage)
 ---
 
 <header>
@@ -22,10 +21,7 @@ const lang = getLanguageFromURL(currentPage);
 			<SidebarToggle client:idle />
 		</div>
 		<div class="logo flex">
-			<a href="/">
-				<AstroLogo size={40} />
-				<h1>{SITE.title ?? 'Documentation'}</h1>
-			</a>
+			<a href="/"><h1>{SITE.title ?? 'Documentation'}</h1> </a>
 		</div>
 		<div style="flex-grow: 1;"></div>
 		{KNOWN_LANGUAGE_CODES.length > 1 && <LanguageSelect lang={lang} client:idle />}

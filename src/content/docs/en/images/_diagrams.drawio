@@ -1,0 +1,33 @@
+<mxfile host="Electron" modified="2023-04-21T17:58:58.778Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="OZTwv80KXpJqZEm9NLtZ" version="21.2.1" type="device">
+  <diagram name="Page-1" id="vky39mMvaNPA3PYbKXel">
+    <mxGraphModel dx="969" dy="812" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="twKpQtTMhSlI48iwDWwW-8" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="120" width="460" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="twKpQtTMhSlI48iwDWwW-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="twKpQtTMhSlI48iwDWwW-1" target="twKpQtTMhSlI48iwDWwW-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="twKpQtTMhSlI48iwDWwW-1" value="SPMessage&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;OP_CONTRACT&lt;/font&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="230" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="twKpQtTMhSlI48iwDWwW-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="twKpQtTMhSlI48iwDWwW-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="twKpQtTMhSlI48iwDWwW-2" value="SPMessage&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;OP_ACTION_ENCRYPTED&lt;/font&gt;&lt;/span&gt;" style="whiteSpace=wrap;html=1;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="180" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="twKpQtTMhSlI48iwDWwW-7" value="• • •" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="600" y="195" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="twKpQtTMhSlI48iwDWwW-9" value="Example: a simple contract chain" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="295" y="130" width="270" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
