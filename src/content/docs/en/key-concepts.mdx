@@ -19,7 +19,7 @@ All subsequent messages are used to update the state of that contract chain. The
 
 Together, these messages form an append-only chain of events that is used to build up a state for that contract chain.
 
-📚 [**Reference: `SPMessage`**](/en/spmessage)
+📚 [**Reference: `SPMessage`**](spmessage)
 
 
 ### Contract Chains
@@ -47,8 +47,37 @@ The key-value store is used not just for storing events, but also for keeping tr
 
 ### Contract Manifests
 
+Contracts are stored in the key-value store along with a manifest file. This JSON file specifies various metadata about the contract, including:
+
+- Version
+- Filename (including file extension)
+- Author(s)
+- Contract hash
+- Cryptographic signature
+
+When contracts are loaded by the client, they are loaded first by specifying the hash of the manifest file.
+
+Every `SPMessage` references the specific manifest used to interpret it. This allows contract chains to be upgraded over time while ensuring a deterministic state. Old messages in the chain will always be interpreted using the correct version of the contract.
+
+📚 [**Reference: Contract Manifest**](contract-manifest)
 
 ### Opcodes
+
+Shelter Protocol defines a lightweight [decentralized/federated](federation) end-to-end encrypted virtual machine, and as such it contains opcodes for performing actions within this virtual machine:
+
+- [`OP_CONTRACT`](opcodes#op_contract)
+- [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted)
+- [`OP_ACTION_UNENCRYPTED`](opcodes#op_action_unencrypted)
+- [`OP_KEY_ADD`](opcodes#op_key_add)
+- [`OP_KEY_DEL`](opcodes#op_key_del)
+- [`OP_KEY_REQUEST`](opcodes#op_key_request)
+- [`OP_KEY_REQUEST_RESPONSE`](opcodes#op_key_request_response)
+- [`OP_KEYSHARE`](opcodes#op_keyshare)
+- [`OP_CONTRACT_AUTH`](opcodes#op_contract_auth)
+- [`OP_CONTRACT_DEAUTH`](opcodes#op_contract_deauth)
+- [`OP_PROP_SET`](opcodes#op_prop_set)
+- [`OP_PROP_DEL`](opcodes#op_prop_del)
+- [`OP_ATOMIC`](opcodes#op_atomic)
 
 ### Password Salt Retrieval
 
@@ -56,6 +85,6 @@ Since every action in SP is signed using a user's private key, which in turn is 
 
 The Shelter Protocol has within it a zero-knowledge sub-protocol for storing and retrieving passwords salts. This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to login from any device using just their username and password, without needing to scan any QR codes. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
 
-📚 [**Reference: ZKPP**](/en/zkpp)
+📚 [**Reference: ZKPP**](zkpp)
 
 

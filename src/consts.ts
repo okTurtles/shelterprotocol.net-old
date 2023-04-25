@@ -37,15 +37,21 @@ export const SIDEBAR: Sidebar = {
 		'Overview': [
 			{ text: 'Introduction', link: 'en/introduction' },
 			{ text: 'Key Concepts', link: 'en/key-concepts' },
-			{ text: 'Opcodes', link: 'en/opcodes-overview' },
-			{ text: 'Salt Retrieval', link: 'en/salt-overview' },
-			{ text: 'Key-value Store', link: 'en/key-value-store' },
-			{ text: 'Usernames', link: 'en/usernames' },
-			{ text: 'Real-world Apps', link: 'en/usecases' }
+			{ text: 'Federation', link: 'en/federation' },
+			{ text: 'Real-world Apps', link: 'en/usecases' },
+			{ text: 'Security Evaluation', link: 'en/security' },
+		],
+		'Examples': [
+			{ text: 'Identity Contract', link: 'en/identity-contract' }
 		],
 		'Reference': [
 			{ text: 'SPMessage', link: 'en/spmessage' },
-			{ text: 'Opcodes', link: 'en/opcodes-reference' }
+			{ text: 'Opcodes', link: 'en/opcodes' },
+			{ text: 'Contract Manifest', link: 'en/contract-manifest' },
+			{ text: 'ZKPP', link: 'en/zkpp' },
+		],
+		'About': [
+			{ text: 'Authors', link: 'en/authors' }
 		]
 	}
 }

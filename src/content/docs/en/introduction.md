@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-description: "Docs intro"
+description: "Introduction to the Shelter Protocol"
 ---
 
 ### What?
