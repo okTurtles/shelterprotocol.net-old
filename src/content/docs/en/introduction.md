@@ -42,3 +42,5 @@ And Related Components:
 - **A Key-Value Store For Storing State**
 - **A Namespace For Mapping Usernames To Identity Contracts**
 - **A Zero-Knowledge Protocol For Storing & Retrieving Password Salts**
+
+Learn more about the [Key Concepts](key-concepts).
