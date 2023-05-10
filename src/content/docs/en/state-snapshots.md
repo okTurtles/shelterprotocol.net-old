@@ -1,4 +1,4 @@
 ---
 title: "State Snapshots"
-description: "Contract state snapshots"
+description: "Contract state snapshots reference"
 ---

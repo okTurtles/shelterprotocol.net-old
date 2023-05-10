@@ -71,7 +71,7 @@ Shelter Protocol defines a lightweight [decentralized/federated](federation) end
 - [`OP_KEY_UPDATE`](opcodes#op_key_update)
 - [`OP_KEY_DEL`](opcodes#op_key_del)
 - [`OP_KEY_REQUEST`](opcodes#op_key_request)
-- [`OP_KEY_REQUEST_RESPONSE`](opcodes#op_key_request_response)
+- [`OP_KEY_REQUEST_SEEN`](opcodes#op_key_request_seen)
 - [`OP_KEY_SHARE`](opcodes#op_key_share)
 - [`OP_PROP_SET`](opcodes#op_prop_set)
 - [`OP_PROP_DEL`](opcodes#op_prop_del)
@@ -88,7 +88,5 @@ The Shelter Protocol has within it a zero-knowledge sub-protocol for storing and
 ### State Snapshots
 
 Heavily modified contracts can take an unacceptably long time to fully sync. In such instances, Shelter Protocol supports saving state snapshots every `N` messages. This makes it possible to catch up to the latest state of the contract without having to sync the entire chain. It can also help servers to save data by periodically trimming old messages.
-
-Learn more about how this feature works:
 
 📚 [**Reference: State Snapshots**](state-snapshots)

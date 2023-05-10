@@ -1,5 +1,5 @@
 ---
-title: "Opcodes Reference"
+title: "Opcodes"
 description: "Shelter Protocol Opcodes Reference"
 ---
 
@@ -216,11 +216,11 @@ A few notes:
 - In the `"data"` portion, `+` means "concatinate with `|`". This means that none of the concatinated elements should themselves contain the `|` character.
 - Only keys marked `"shareable": true` can be requested. See [`OP_KEY_ADD`](#op_key_add) for details.
 
-### `OP_KEY_REQUEST_RESPONSE`
+### `OP_KEY_REQUEST_SEEN`
 
-The actual response to a properly formatted and authorized `OP_KEY_REQUEST` is an [`OP_KEY_SHARE`](#op_key_share) message, not `OP_KEY_REQUEST_RESPONSE`. However, because Shelter Protocol is an end-to-end encrypted protocol, it relies on end-user devices to send `OP_KEY_SHARE` messages whenever they are online and able to. Therefore, in order to prevent multiple `OP_KEY_SHARE` messages from being sent, we need a way to mark a key request as being responded to. This is the purpose of `OP_KEY_REQUEST_RESPONSE`.
+The actual response to a properly formatted and authorized `OP_KEY_REQUEST` is an [`OP_KEY_SHARE`](#op_key_share) message, not `OP_KEY_REQUEST_SEEN`. However, because Shelter Protocol is an end-to-end encrypted protocol, it relies on end-user devices to send `OP_KEY_SHARE` messages whenever they are online and able to. Therefore, in order to prevent multiple `OP_KEY_SHARE` messages from being sent, we need a way to mark a key request as being responded to. This is the purpose of `OP_KEY_REQUEST_SEEN`.
 
-- Opcode: `"krr"`
+- Opcode: `"krs"`
 
 ```json
 {
@@ -229,9 +229,9 @@ The actual response to a properly formatted and authorized `OP_KEY_REQUEST` is a
 }
 ```
 
-Note that unlike `OP_KEY_SHARE`, `OP_KEY_REQUEST_RESPONSE` is sent to the contract that is responding to the `OP_KEY_REQUEST`.
+Note that unlike `OP_KEY_SHARE`, `OP_KEY_REQUEST_SEEN` is sent to the contract that is responding to the `OP_KEY_REQUEST`.
 
-It's theoretically possible that for some reason a client wasn't able to send `OP_KEY_SHARE` but was able to send `OP_KEY_REQUEST_RESPONSE`. For example, the requesting contract might have been deleted. In this rare case `"success"` would be set to `false`. It is up to client implementations to decide how many unsuccessful attempts they will tolerate before giving up. To avoid bloating the contract chain, we recommend a 3-strike rule, and no more than 5 unsuccessful attempts.
+It's theoretically possible that for some reason a client wasn't able to send `OP_KEY_SHARE` but was able to send `OP_KEY_REQUEST_SEEN`. For example, the requesting contract might have been deleted. In this rare case `"success"` would be set to `false`. It is up to client implementations to decide how many unsuccessful attempts they will tolerate before giving up. To avoid bloating the contract chain, we recommend a 3-strike rule, and no more than 5 unsuccessful attempts.
 
 ### `OP_KEY_SHARE`
 
