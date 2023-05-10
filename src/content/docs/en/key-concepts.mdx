@@ -5,7 +5,7 @@ import spmessageRef from './images/SPMessage.svg'
 
 The Shelter Protocol (SP) defines a method to create a lightweight, high-level virtual machine out of contract chains. Contract chains are what define [smart contracts](https://en.wikipedia.org/wiki/Smart_contract) along with their activity in SP.
 
-We can use these contract chains to create and define concepts in our programs in a similar way to how Classes and Objects are used in [Object-oriented Programming](https://en.wikipedia.org/wiki/Object-oriented_programming), except these Classes and Objects can shared across many devices while keeping their data end-to-end encrypted.
+We can use these contract chains to create and define concepts in our programs in a similar way to how Classes and Objects are used in [Object-oriented Programming](https://en.wikipedia.org/wiki/Object-oriented_programming), except these Classes and Objects can be shared across many devices while keeping their data end-to-end encrypted.
 
 ### SPMessage
 
@@ -20,7 +20,6 @@ All subsequent messages are used to update the state of that contract chain. The
 Together, these messages form an append-only chain of events that is used to build up a state for that contract chain.
 
 📚 [**Reference: `SPMessage`**](spmessage)
-
 
 ### Contract Chains
 
@@ -69,12 +68,11 @@ Shelter Protocol defines a lightweight [decentralized/federated](federation) end
 - [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted)
 - [`OP_ACTION_UNENCRYPTED`](opcodes#op_action_unencrypted)
 - [`OP_KEY_ADD`](opcodes#op_key_add)
+- [`OP_KEY_UPDATE`](opcodes#op_key_update)
 - [`OP_KEY_DEL`](opcodes#op_key_del)
 - [`OP_KEY_REQUEST`](opcodes#op_key_request)
 - [`OP_KEY_REQUEST_RESPONSE`](opcodes#op_key_request_response)
-- [`OP_KEYSHARE`](opcodes#op_keyshare)
-- [`OP_CONTRACT_AUTH`](opcodes#op_contract_auth)
-- [`OP_CONTRACT_DEAUTH`](opcodes#op_contract_deauth)
+- [`OP_KEY_SHARE`](opcodes#op_key_share)
 - [`OP_PROP_SET`](opcodes#op_prop_set)
 - [`OP_PROP_DEL`](opcodes#op_prop_del)
 - [`OP_ATOMIC`](opcodes#op_atomic)
@@ -87,4 +85,10 @@ The Shelter Protocol has within it a zero-knowledge sub-protocol for storing and
 
 📚 [**Reference: ZKPP**](zkpp)
 
+### State Snapshots
 
+Heavily modified contracts can take an unacceptably long time to fully sync. In such instances, Shelter Protocol supports saving state snapshots every `N` messages. This makes it possible to catch up to the latest state of the contract without having to sync the entire chain. It can also help servers to save data by periodically trimming old messages.
+
+Learn more about how this feature works:
+
+📚 [**Reference: State Snapshots**](state-snapshots)

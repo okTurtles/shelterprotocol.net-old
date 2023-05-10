@@ -48,10 +48,12 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'SPMessage', link: 'en/spmessage' },
 			{ text: 'Opcodes', link: 'en/opcodes' },
 			{ text: 'Contract Manifest', link: 'en/contract-manifest' },
+			{ text: 'State Snapshots', link: 'en/state-snapshots' },
 			{ text: 'ZKPP', link: 'en/zkpp' },
 		],
 		'About': [
-			{ text: 'Authors', link: 'en/authors' }
+			{ text: 'Authors', link: 'en/authors' },
+			{ text: 'History', link: 'en/history' }
 		]
 	}
 }
