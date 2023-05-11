@@ -205,6 +205,8 @@ Allows contracts to request private keys from other contracts (shared via [`OP_K
 
 A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used to create a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](invite-keys).
 
+TODO: add note that it adds keys with KEY_REQUEST_SEEN perms
+
 - Opcode: `"kr"`
 
 ```json
@@ -242,15 +244,18 @@ It's theoretically possible that for some reason a client wasn't able to send `O
 
 ### `OP_KEY_SHARE`
 
-Shares encrypted private keys with another contract in response to [`OP_KEY_REQUEST`](#op_key_request).
+Shares encrypted private keys with this contract. Can be in response to [`OP_KEY_REQUEST`](#op_key_request) or not.
 
 It can be very useful for selectively revealing information to specific entities, or allowing other contracts to write to this contract. In this sense it is similar (though different in mechanism) to [`"foreignKey"`](#op_key_add).
+
+Important: this is one of the few opcodes that can be sent to any contract without permission. A contract can send this opcode once without permission. In that case, the receiving client will prompt the user to decide whether or not to add this private key. This can be useful when designing direct-messaging systems.
 
 - Opcode: `"ks"`
 
 ```json
 {
   "contractID": "<the contractID of the contract sending this message>",
+  "keyRequestHash": "<hash of original OP_KEY_REQUEST message>", // included if a response
   "keys": [
     {
       "id": "<keyId>",
@@ -267,7 +272,8 @@ It can be very useful for selectively revealing information to specific entities
 }
 ```
 
-Here `"<encryptionKeyId>"` is the key used to encrypt `"content"`, and it is the same `"encryptionKeyId"` as the one sent in the corresponding `OP_KEY_REQUEST`.
+- `"<encryptionKeyId>"` is the key used to encrypt `"content"`, and it is the same `"encryptionKeyId"` as the one sent in the corresponding `OP_KEY_REQUEST`.
+- `"keyRequestHash"` is included if this `OP_KEY_SHARE` is being sent in response to an `OP_KEY_REQUEST` message.
 
 ### `OP_PROP_SET`
 
