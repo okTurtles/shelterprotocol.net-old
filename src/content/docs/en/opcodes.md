@@ -97,7 +97,7 @@ For example, every contract should have a `CSK` (`Contract Signing Key`, marked 
     "data": "<JSON encoded array of key data>",
     "permissions": ["<opcode-1>", "<opcode-2>", "..."],
     "ringLevel": <positive-integer-or-zero>,
-    "foreignKey": "sp:[<host.com>/contract/]<contractID>?keyName=<keyName>", // OPTIONAL
+    "foreignKey": "sp:[<host.com>/contract/]<contractID>?keyName=<foreignKeyName>", // OPTIONAL
     "meta": { ... } // OPTIONAL
   },
   // key 2
@@ -136,7 +136,7 @@ How the string for the `publicKey` and `secretKey` is generated depends on the k
 
 `"ringLevel"` specifies which keys are allowed to replace other keys. Keys of a lower ring level can replace keys of a higher ring level using [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del), but not vice versa. The lowest ring level is `0`, and the highest is `2^53-1` (`Number.MAX_SAFE_INTEGER`). The ring level must be the same or higher as the key sending this message.
 
-`"foreignKey"` - if present, indicates that this entry is a reference copy of a key from another contract. A key with the same `<keyName>` on `<contractID>` must then be monitored for any updates, and those updates mirrored to this contract. If either [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del) are called on the key on the `foreignKey`, then any client syncing this contract — with the appropriate `permissions` and `ringLevel` — must mirror those updates to this contract (if no other client has already done so). Mirroring stops once `OP_KEY_DEL` removes the key either on the foreign contract or locally on this contract.
+`"foreignKey"` - if present, indicates that this entry is a reference copy of a key from another contract. A key with the name `<foreignKeyName>` on `<contractID>` must then be monitored for any updates, and those updates mirrored to this contract. If either [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del) are called on the key on the `foreignKey`, then any client syncing this contract — with the appropriate `permissions` and `ringLevel` — must mirror those updates to this contract (if no other client has already done so). Mirroring stops once `OP_KEY_DEL` removes the key either on the foreign contract or locally on this contract.
 
 > ⚠︎ To avoid name collisions, contracts must not copy a foreign key's name into this contract. Example: when adding a foreign `#csk` to a contract with an existing `#csk`, it is best to contextualize the key name, for example: `<contractID>/#csk`.
 
