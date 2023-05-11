@@ -96,6 +96,7 @@ For example, every contract should have a `CSK` (`Contract Signing Key`, marked 
     "purpose": ["sign", "enc", "..."],
     "data": "<JSON encoded array of key data>",
     "permissions": ["<opcode-1>", "<opcode-2>", "..."],
+    "ringLevel": <positive-integer-or-zero>,
     "foreignKey": "sp:[<host.com>/contract/]<contractID>?keyName=<keyName>", // OPTIONAL
     "meta": { ... } // OPTIONAL
   },
@@ -113,6 +114,7 @@ For example, every contract should have a `CSK` (`Contract Signing Key`, marked 
 
 - `#csk`: as mentioned, this key is used to represent the contract itself, and is especially important when it comes to cross-contract communication via `"foreignKey"`
 - `#cek`: this is the `Contract Encryption Key`. It is a key that is most often used to encrypt data within the contract. Contracts that wish to send encrypted data to this contract will use the `#cek`.
+- `#inviteKey-`: is used to define [invite keys for creating and joining groups.](invite-keys)
 
 `"purpose"` is an array of strings that state the key's purpose. Typically this will be either `"sign"` (for signing messages), or `"enc"` for encrypting/decrypting messages, or it could be both. Other arbitrary values are allowed too if they are useful to protocol implementers.
 
@@ -130,11 +132,15 @@ How the string for the `publicKey` and `secretKey` is generated depends on the k
 
 > ⚠︎ Shelter Protocol currently does not specify what these key types are, leaving it up to individual implementations to decide. Future protocol upgrades could standardize type names. For now, we encourage implementers to choose unique type names that are long and descriptive of the ciphers used.
 
-`"permissions"` is a list of opcode values (e.g. `"ka"`, `"ae"`, etc.) that this key is allowed to perform.
+`"permissions"` is a list of opcode values (e.g. `"ka"`, `"ae"`, etc.) that this key is allowed to perform. Alternatively, the special value `"*"` may be used to indicate all permissions are granted (to support extending the protocol with new opcodes).
 
-`"foreignKey"` - if present, indicates that this entry is a reference copy of a key from another contract. A key with the same `"name"` on `"foreignKey"` must then be monitored for any updates, and those updates mirrored to this contract. If either [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del) are called on the key on the `"foreignKey"`, then any client syncing this contract must mirror those updates to this contract by sending a copy of those updates to this contract (if they have write-permission and no other client has already done so). Contracts should stop monitoring updates after seeing `OP_KEY_DEL`.
+`"ringLevel"` specifies which keys are allowed to replace other keys. Keys of a lower ring level can replace keys of a higher ring level using [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del), but not vice versa. The lowest ring level is `0`, and the highest is `2^53-1` (`Number.MAX_SAFE_INTEGER`). The ring level must be the same or higher as the key sending this message.
+
+`"foreignKey"` - if present, indicates that this entry is a reference copy of a key from another contract. A key with the same `<keyName>` on `<contractID>` must then be monitored for any updates, and those updates mirrored to this contract. If either [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del) are called on the key on the `foreignKey`, then any client syncing this contract — with the appropriate `permissions` and `ringLevel` — must mirror those updates to this contract (if no other client has already done so). Mirroring stops once `OP_KEY_DEL` removes the key either on the foreign contract or locally on this contract.
 
 > ⚠︎ To avoid name collisions, contracts must not copy a foreign key's name into this contract. Example: when adding a foreign `#csk` to a contract with an existing `#csk`, it is best to contextualize the key name, for example: `<contractID>/#csk`.
+
+> ⚠︎ There is no proof that the `foreignKey` actually matches the key on the foreign contract because keys can be lost and replaced by other keys, and therefore there is no trivial way to include a proof that the keys match without mirroring all of the keys of the foreign contract.
 
 `"meta"` - if present, specifies metadata for the key. A contract might want to include an encrypted copy of a private key for example, and in this case the `meta.private` field can be used for this purpose.
 
@@ -154,7 +160,6 @@ A few notes:
 
 - The `keyId` field specifies the key that was used to encrypt the data in `meta.private.content`
 - The special boolean `meta.private.shareable` attribute indicates whether the private key can be shared with another contract using [`OP_KEY_SHARE`](#op_key_share) (in response to [`OP_KEY_REQUEST`](#op_key_request))
-
 
 ### `OP_KEY_UPDATE`
 
@@ -184,7 +189,7 @@ Any updates to `"purpose"` or `"permissions"` must be sctrictly more restrictive
 
 ### `OP_KEY_DEL`
 
-Specifies an array of keyIds to delete from the contract. Deleted keys can no longer be used to perform any actions on the contract, and this should be enforced by the server.
+Specifies an array of keyIds to delete from the contract. Deleted keys can no longer be used to perform any actions on the contract, and this is enforced by the server.
 
 - Opcode: `"kd"`
 
@@ -192,11 +197,13 @@ Specifies an array of keyIds to delete from the contract. Deleted keys can no lo
 ["<keyId-1>", "<keyId-2>", ... ]
 ```
 
+Note that if a key is deleted, any contracts listening for updates to this key via [`foreignKey`](#op_key_add) will stop listening.
+
 ### `OP_KEY_REQUEST`
 
 Allows contracts to request private keys from other contracts (shared via [`OP_KEY_SHARE`](#op_key_share)).
 
-A real-world usecase for this opcode is in the handling of invites to join a group.
+A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used to create a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](invite-keys).
 
 - Opcode: `"kr"`
 
