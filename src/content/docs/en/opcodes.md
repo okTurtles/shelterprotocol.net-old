@@ -163,7 +163,9 @@ A few notes:
 
 ### `OP_KEY_UPDATE`
 
-This operation acts as a `OP_KEY_DEL` and `OP_KEY_ADD`. It deletes `<oldKeyId>` and then creates a similar key with different key `"data"`, updating any other key properties as needed.
+This operation can be used to rotate an existing key, and/or update key properties like `"purpose"` or `"permissions"`.
+
+When rotating a key, it acts as a `OP_KEY_DEL` and `OP_KEY_ADD`, deleting `<oldKeyId>` and then creating a similar key with different key `"data"`.
 
 - Opcode: `"ku"`
 
@@ -171,9 +173,9 @@ This operation acts as a `OP_KEY_DEL` and `OP_KEY_ADD`. It deletes `<oldKeyId>` 
 [
   {
     "name": "<keyName>",
-    "id": "<newKeyId>",
+    "id": "<newKeyId>", // optionally rotate key
     "oldKeyId": "<oldKeyId>",
-    "data": "<newData>",
+    "data": "<newData>",  // optionally rotate key
     "purpose": [], // optionally update the purpose
     "permissions": [], // optionally update permissions (if previous permissions allow us)
     "meta": {} // optionally update metadata
