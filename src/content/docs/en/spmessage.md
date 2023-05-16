@@ -63,6 +63,6 @@ Generating the signature:
 
 Messages are usually identified in a content-addressable way: by the hash of the entire message JSON. That is how they're stored on the server (and optionally, on the client as well).
 
-However, in some situations it might be more useful to identify a message by its `nonce` value. Take for example the case where you are sending a message to a chatroom and want to perform an action upon receiving that message back.
+However, in some situations it might be more useful to identify a message by its `nonce` value. Take, for example, the case where you are sending a message to a chatroom and want to perform an action upon receiving that message back.
 
 In this situation, it's possible that the message will need to be recreated multiple times before it is successfully sent. This happens when another message makes it into the chain before ours, changing the value we need to use for `previousHEAD`. In that case we would resend the message with the same data except for a different `previousHEAD`. If this is done for us by the underlying framework, we may not be able to setup proper event listeners because we won't know what message hash to listen for. Instead, we can setup an event listener that expects a message with the same `nonce` to be sent back to us and handle things from there.
