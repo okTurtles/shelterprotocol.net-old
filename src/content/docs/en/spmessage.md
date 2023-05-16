@@ -35,7 +35,7 @@ Wherever hashes appear in the protocol, they are 32-byte [blake2b](https://www.b
 - `originatingContractID` if this is a message from one contract to another, this field specifies the `contractID` of the contract sending the message, and `null` otherwise.
 - `op` is a short string representation of one of the various [opcodes](opcodes) (e.g. `"c"` for [`OP_CONTRACT`](opcodes#op_contract)).
 - `manifest` is the [manifest hash](contract-manifest) of the contract code used to interpret this message.
-- `nonce` is a [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) unique identifier for this message. Useful for uniquely identifying messages in the case where a message needs to be resent multiple times due to `previousHEAD` conflicts.
+- `nonce` is a [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) unique identifier for this message. Useful for uniquely identifying messages in the case where a message needs to be resent multiple times due to `previousHEAD` conflicts. See [Resending Messages](#resending-messages)
 
 ### Section: `message`
 
@@ -58,3 +58,11 @@ Generating the signature:
    ```
 
 2. Sign the resulting string using `<keyId>` and encode the `<signature>` using base64.
+
+### Resending Messages
+
+Messages are usually identified in a content-addressable way: by the hash of the entire message JSON. That is how they're stored on the server (and optionally, on the client as well).
+
+However, in some situations it might be more useful to identify a message by its `nonce` value. Take for example the case where you are sending a message to a chatroom and want to perform an action upon receiving that message back.
+
+In this situation, it's possible that the message will need to be recreated multiple times before it is successfully sent. This happens when another message makes it into the chain before ours, changing the value we need to use for `previousHEAD`. In that case we would resend the message with the same data except for a different `previousHEAD`. If this is done for us by the underlying framework, we may not be able to setup proper event listeners because we won't know what message hash to listen for. Instead, we can setup an event listener that expects a message with the same `nonce` to be sent back to us and handle things from there.
