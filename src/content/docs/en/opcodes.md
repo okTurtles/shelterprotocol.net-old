@@ -3,31 +3,7 @@ title: "Opcodes"
 description: "Shelter Protocol Opcodes Reference"
 ---
 
-All opcodes are wrapped using [`SPMessage`](spmessage). The structure of every `SPMessage` is the same and looks like this:
-
-```json
-{
-  "head": {
-    "version": "1.0.0",
-    "previousHEAD": null | "<previousHEAD>",
-    "contractID": null | "<contractID>",
-    "originatingContractID": null | "<contractID>",
-    "op": "<opcode>",
-    "manifest": "<manifest-hash>",
-    "nonce": "<string-uuid>"
-  },
-  "message": <op-value>,
-  "sig": {
-    "type": "<sig/key type>",
-    "keyId": "<keyId>",
-    "data": "<signature>"
-  }
-}
-```
-
-You can read more about those values in the [`SPMessage` Reference](spmessage).
-
-For this document, we will show only the `<op-value>` corresponding to each `SPMessage` for each opcode.
+All opcodes are wrapped using [`SPMessage`](spmessage). This document shows the possible values for `<op-value>`.
 
 ### `OP_CONTRACT`
 
