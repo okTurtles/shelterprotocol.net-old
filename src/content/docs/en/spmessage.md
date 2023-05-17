@@ -59,6 +59,16 @@ Generating the signature:
 
 2. Sign the resulting string using `<keyId>` and encode the `<signature>` using base64.
 
+### Content Addressing
+
+As mentioned, messages are referenced by their 32-byte blake2b multihash. Implementations should take care to verify that all received messages have the appropriate hash.
+
+For example, contracts are sync'd by specifying their `contractID`. Implementations must make sure that when a `contractID` is newly synced, the first message actually does have a hash matching that `contractID`.
+
+To help with syncing, the server has an API to return the latest hash of a contract chain that looks like this: [`/latestHash/{contractID}`](server-api#latesthash)
+
+During syncing of latest messages, clients should make sure to verify that hash appears among the messages received.
+
 ### Resending Messages
 
 Messages are usually identified in a content-addressable way: by the hash of the entire message JSON. That is how they're stored on the server (and optionally, on the client as well).

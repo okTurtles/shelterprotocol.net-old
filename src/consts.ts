@@ -47,6 +47,7 @@ export const SIDEBAR: Sidebar = {
 		'Reference': [
 			{ text: 'SPMessage', link: 'en/spmessage' },
 			{ text: 'Opcodes', link: 'en/opcodes' },
+			{ text: 'Server API', link: 'en/server-api' },
 			{ text: 'Invite Keys', link: 'en/invite-keys' },
 			{ text: 'Contract Manifest', link: 'en/contract-manifest' },
 			{ text: 'State Snapshots', link: 'en/state-snapshots' },
