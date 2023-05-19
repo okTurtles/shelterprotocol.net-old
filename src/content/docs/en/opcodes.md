@@ -250,8 +250,10 @@ Important: this is one of the few opcodes that can be sent to any contract witho
 }
 ```
 
-- `"<encryptionKeyId>"` is the key used to encrypt `"content"`, and it is the same `"encryptionKeyId"` as the one sent in the corresponding `OP_KEY_REQUEST`.
-- `"keyRequestHash"` is included if this `OP_KEY_SHARE` is being sent in response to an `OP_KEY_REQUEST` message.
+Notes:
+
+- `<encryptionKeyId>` is the key used to encrypt `content`, and it is the same `encryptionKeyId` as the one sent in the corresponding `OP_KEY_REQUEST`.
+- `keyRequestHash` is included if this `OP_KEY_SHARE` is being sent in response to an `OP_KEY_REQUEST` message.
 
 ### `OP_PROP_SET`
 
@@ -278,6 +280,50 @@ Removes key-value property pairs from this contract.
 ```json
 ["<key1>", "<key2>", ... ]
 ```
+
+### `OP_WRITE_REQUEST`
+
+Requests permission to write to a contract. The only opcode that is allowed to be sent unsolicited and without permission to another contract.
+
+- Opcode: `"wr"`
+
+```json
+{
+  "username": "<username>",
+  "keyAdd": {
+    // OP_KEY_ADD
+  },
+  "keyShare": {
+    // optional OP_KEY_SHARE
+  }
+}
+```
+
+- `username` specifies the name of the username of the sender. The server and receiving client both need to verify that this message is signed with the key that's in `keyAdd`, and the `username` maps to that same `originatingContractID`.
+- `keyAdd` - an [`OP_KEY_ADD`](#op_key_add) to add to this contract if the request is approved via [`OP_WRITE_REQUEST_RESPONSE`](#op_write_request_response). The following restrictions must be enforced:
+  - The key `name` must not be a reserved name (like `#csk`, `#cek`, or anything beginning with `#`)
+  - The key `name` must not conflict with an existing key name on this contract
+  - It must specify `foreignKey`
+  - If the receiving contract does not approve of the `permissions` or `ringLevel` being requested, it must reject this request.
+- `keyShare` - optionally offers to share a private key via [`OP_KEY_SHARE`](#op_key_share), if approved.
+
+### `OP_WRITE_REQUEST_RESPONSE`
+
+Approves or rejects a prior [`OP_WRITE_REQUEST`](#op_write_request).
+
+The contract that sent `OP_WRITE_REQUEST` should be monitoring this contract for this message.
+
+- Opcode: `"wrr"`
+
+```json
+{
+  "requestHash": "<requestHash>",
+  "approved": true | false
+}
+```
+
+- `requestHash` is the message hash of the corresponding [`OP_WRITE_REQUEST`](#op_write_request).
+- `approved` - if `true`.
 
 ### `OP_ATOMIC`
 
