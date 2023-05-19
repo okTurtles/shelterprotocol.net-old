@@ -323,7 +323,7 @@ The contract that sent `OP_WRITE_REQUEST` should be monitoring this contract for
 ```
 
 - `requestHash` is the message hash of the corresponding [`OP_WRITE_REQUEST`](#op_write_request).
-- `approved` - if `true`.
+- `approved` - if `true`, processes any `keyAdd` and `keyShare` instructions from the corresponding request.
 
 ### `OP_ATOMIC`
 
