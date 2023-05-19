@@ -299,13 +299,14 @@ Requests permission to write to a contract. The only opcode that is allowed to b
 }
 ```
 
-- `username` specifies the name of the username of the sender. The server and receiving client both need to verify that this message is signed with the key that's in `keyAdd`, and the `username` maps to that same `originatingContractID`.
+- `username` specifies the name of the username of the sender. The server and receiving client both need to verify that this message is signed with the key that's in `keyAdd`, and the `username` maps to that same `originatingContractID`. 256 byte limit.
 - `keyAdd` - an [`OP_KEY_ADD`](#op_key_add) to add to this contract if the request is approved via [`OP_WRITE_REQUEST_RESPONSE`](#op_write_request_response). The following restrictions must be enforced:
   - The key `name` must not be a reserved name (like `#csk`, `#cek`, or anything beginning with `#`)
   - The key `name` must not conflict with an existing key name on this contract
   - It must specify `foreignKey`
   - If the receiving contract does not approve of the `permissions` or `ringLevel` being requested, it must reject this request.
-- `keyShare` - optionally offers to share a private key via [`OP_KEY_SHARE`](#op_key_share), if approved.
+  - Clients and servers should enforce strict limits for the length of values for the fields of the key's `meta` data.
+- `keyShare` - optionally offers to share a private key via [`OP_KEY_SHARE`](#op_key_share), if approved. Clients and servers should enforce strict limits on the length of values for the fields of the key's `meta` data.
 
 ### `OP_WRITE_REQUEST_RESPONSE`
 
