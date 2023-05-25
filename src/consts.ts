@@ -40,6 +40,7 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'Federation', link: 'en/federation' },
 			{ text: 'Real-world Apps', link: 'en/usecases' },
 			{ text: 'Security Evaluation', link: 'en/security' },
+			{ text: 'Implementations', link: 'en/implementations' },
 		],
 		'Examples': [
 			{ text: 'Identity Contract', link: 'en/identity-contract' }
