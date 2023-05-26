@@ -4,7 +4,7 @@ title: "Implementations"
 
 ### Coming Soon
 
-Be the first to know when the first implementation of the Shelter Protocol is released.
+The first implementation of the Shelter Protocol is readying for release. Be the first to know when it happens.
 
 Follow okTurtles on social media:
 

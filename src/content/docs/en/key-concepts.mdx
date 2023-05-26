@@ -81,10 +81,11 @@ Shelter Protocol defines a lightweight [decentralized/federated](federation) end
 
 ### Password Salt Retrieval
 
-Since every action in SP is signed using a user's private key, which in turn is derived from their password, it's very important to use password salts along with the user's password to protect against brute force password cracking attacks.
+Since every action in SP is signed using a user's private key, which in turn [is derived from their password](multi-device), it's very important to use password salts along with the user's password to protect against brute force password cracking attacks.
 
 The Shelter Protocol has within it a zero-knowledge sub-protocol for storing and retrieving passwords salts. This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to login from any device using just their username and password, without needing to scan any QR codes. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
 
+📚 [**Multiple Devices**](multi-device) \
 📚 [**Reference: ZKPP**](zkpp)
 
 ### State Snapshots

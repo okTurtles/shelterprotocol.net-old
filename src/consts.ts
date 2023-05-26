@@ -37,6 +37,7 @@ export const SIDEBAR: Sidebar = {
 		'Overview': [
 			{ text: 'Introduction', link: 'en/introduction' },
 			{ text: 'Key Concepts', link: 'en/key-concepts' },
+			{ text: 'Multiple Devices', link: 'en/multi-device' },
 			{ text: 'Federation', link: 'en/federation' },
 			{ text: 'Real-world Apps', link: 'en/usecases' },
 			{ text: 'Security Evaluation', link: 'en/security' },
