@@ -112,11 +112,11 @@ How the string for the `publicKey` and `secretKey` is generated depends on the k
 
 `"ringLevel"` specifies which keys are allowed to replace other keys. Keys of a lower ring level can replace keys of a higher ring level using [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del), but not vice versa. The lowest ring level is `0`, and the highest is `2^53-1` (`Number.MAX_SAFE_INTEGER`). The ring level must be the same or higher as the key sending this message.
 
-`"foreignKey"` - if present, indicates that this entry is a reference copy of a key from another contract. A key with the name `<foreignKeyName>` on `<contractID>` must then be monitored for any updates, and those updates mirrored to this contract. If either [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del) are called on the key on the `foreignKey`, then any client syncing this contract — with the appropriate `permissions` and `ringLevel` — must mirror those updates to this contract (if no other client has already done so). Mirroring stops once `OP_KEY_DEL` removes the key either on the foreign contract or locally on this contract.
+`"foreignKey"` - if present, indicates that this entry is a reference copy of a key from another contract. A key with the name `<foreignKeyName>` on `<contractID>` must then be monitored for any updates, and those updates mirrored to this contract. If either [`OP_KEY_UPDATE`](#op_key_update) or [`OP_KEY_DEL`](#op_key_del) are called on the key on the `foreignKey`, then any client syncing this contract that has the ability to mirror those updates to this contract (they posses the appropriate `permissions` and `ringLevel`) must mirror those updates to this contract, if and only if the updates haven't already been mirrored. Mirroring stops once `OP_KEY_DEL` removes the key either on the foreign contract or locally on this contract.
 
-> ⚠︎ To avoid name collisions, contracts must not copy a foreign key's name into this contract. Example: when adding a foreign `#csk` to a contract with an existing `#csk`, it is best to contextualize the key name, for example: `<contractID>/#csk`.
-
-> ⚠︎ There is no proof that the `foreignKey` actually matches the key on the foreign contract because keys can be lost and replaced by other keys, and therefore there is no trivial way to include a proof that the keys match without mirroring all of the keys of the foreign contract.
+> ⚠︎ Important considerations
+> - To avoid name collisions, contracts must not copy a foreign key's name into this contract. Example: when adding a foreign `#csk` to a contract with an existing `#csk`, it is best to contextualize the key name, for example: `<contractID>/#csk`.
+> - No proof is included showing `foreignKey` matches the key on the foreign contract because keys can be lost and replaced by other keys, and therefore there is no trivial way to include a proof that the keys match without mirroring all of the keys of the foreign contract.
 
 `"meta"` - if present, specifies metadata for the key. A contract might want to include an encrypted copy of a private key for example, and in this case the `meta.private` field can be used for this purpose.
 
@@ -162,7 +162,9 @@ When rotating a key, it acts as a `OP_KEY_DEL` and `OP_KEY_ADD`, deleting `<oldK
 
 Any updates to `"purpose"` or `"permissions"` must be sctrictly more restrictive.
 
-> ⚠︎ When mirroring foreign key updates, contracts must not copy a foreign key's name into this contract, but instead should use a contextualized name. Example: when updating a foreign `#csk`, rename the key to: `<contractID>/#csk`.
+> ⚠︎ Gotchas when mirroring `foreignKey` updates:
+> - Contracts must not copy a foreign key's name into this contract, but instead should use a contextualized name. Example: when updating a foreign `#csk`, rename the key to: `<contractID>/#csk`.
+> - It is possible to see the same `OP_KEY_UPDATE` twice because two clients might broadcast it simultaneously. If this happens, `oldKeyId` will be missing in the contract state, and implementations should ignore the duplicate message.
 
 
 ### `OP_KEY_DEL`
@@ -176,6 +178,8 @@ Specifies an array of keyIds to delete from the contract. Deleted keys can no lo
 ```
 
 Note that if a key is deleted, any contracts listening for updates to this key via [`foreignKey`](#op_key_add) will stop listening.
+
+> ⚠︎ When mirroring `foreignKey` updates, it is possible to see the same `OP_KEY_DEL` twice because two clients might broadcast it simultaneously. If this happens, the key being deleted won't exist anymore, and implementations should ignore the duplicate message.
 
 ### `OP_KEY_REQUEST`
 

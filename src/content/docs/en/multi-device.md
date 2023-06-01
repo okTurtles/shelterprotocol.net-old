@@ -3,11 +3,11 @@ title: "Multiple Devices"
 description: "Handling multiple devices with the Shelter Protocol"
 ---
 
-Shelter Protocol can replicate the traditional username/password experience users are accustomed to, while dramatically improving security using end-to-end encryption (e2e). In this document we'll explore how this is accomplished in the context of multiple devices.
+Shelter Protocol can replicate the traditional username/password experience users are accustomed to, while dramatically improving security using end-to-end encryption (E2E). In this document we'll explore how this is accomplished in the context of multiple devices.
 
-### Traditional Approaches
+### Introduction
 
-Traditional approaches for e2e protocols will generate unique private keys for each device a user logs in with. This method requires that the protocol design mechanisms for associating the different keys with one account, and then sharing a secret between those devices that can be used to decrypt messages.
+E2E protocols often generate unique private keys for each device a user logs in with. This method requires that the protocol design mechanisms for associating the different keys with one account, and then sharing a secret between those devices that can be used to decrypt messages across all devices.
 
 While this unique-key-per-device approach works, and [can be used with Shelter Protocol (see below)](#unique-keys-per-device), it has a few significant drawbacks:
 
@@ -19,7 +19,7 @@ What's interesting about the unique-key-per-device approach — let's call it UK
 
 To address this issue, UKPD protocols either ask the user to save a secret "seed phrase" somewhere, or use the user's password to encrypt device secret keys and store them on the server for later retrieval. Both of these approaches can be problematic:
 
-- Users will never memorize seed phrases, especially today when dozens of apps use this approach, each asking the user to either memorize 12 random works or write them down somewhere. This is unreasonable and insecure. They could have simply made the seed phrase the password. In fact, this is the standard recommendation, that users save the seed phrase in a password manager.
+- Users will never memorize seed phrases, especially today when dozens of apps use this approach, each asking the user to either memorize 12 random works or write them down somewhere. Users are unlikely to memorize a single seed phrase, let alone multiple. The standard recommendation is to save the seed phrase to a password manager. Well, if we're going to do that, we might as well use the [password-based approach](#using-salts-to-derive-private-keys-securely) anyway with a strong random password.
 - With the approach of encrypting private keys and saving them to the server, there is no longer a need for having unique keys per device in the first place. If the encryption is done naively using just the user's password directly, it can make it easier for attackers to decrypt their private key using brute force methods.
 
 Shelter Protocol supports both UKPD, as well as a more user-friendly method using password salts.
@@ -51,4 +51,4 @@ Shelter Protocol defines the following primitives for key management and key sha
 - [`OP_WRITE_REQUEST`](opcodes#op_write_request)
 - [`OP_WRITE_REQUEST_RESPONSE`](opcodes#op_write_request_response)
 
-Using these primitives, one can build a system that gives multiple devices (read: multiple keys) control over a smart contract.
+Using these primitives, one can build a system that gives multiple devices (read: multiple keys) control over a smart contract. This typically involves using [`OP_KEY_ADD`](opcodes#op_key_add) to add each device key to the contract. [`OP_KEY_SHARE`](opcodes#op_key_share) can then be used to share a shared secret. More complicated schemes can be devised as well.

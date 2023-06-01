@@ -277,6 +277,10 @@ blockquote {
 	line-height: 1.7;
 }
 
+blockquote ul, blockquote ol {
+	margin-top: 0.7rem;
+}
+
 img {
 	max-width: 100%;
 }
