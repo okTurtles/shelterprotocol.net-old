@@ -42,7 +42,7 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'Multiple Devices', link: 'en/multi-device' },
 			{ text: 'Message Processing', link: 'en/message-processing' },
 			{ text: 'Federation', link: 'en/federation' },
-			{ text: 'Security Evaluation', link: 'en/security' },
+			{ text: 'Security', link: 'en/security' },
 			{ text: 'Implementations', link: 'en/implementations' },
 		],
 		'Examples': [

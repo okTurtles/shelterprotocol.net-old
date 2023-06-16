@@ -3,7 +3,7 @@ title: "Federation"
 description: "How federation works in Shelter Protocol"
 ---
 
-🚧 This section is under construction. 🚧
+Coming Soon!
 
 ### Usernames
 
