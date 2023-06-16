@@ -91,6 +91,25 @@ See [ZKPP](zkpp) documentation for details.
 
 The server runs a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) for broadcasting new messages to interested clients.
 
+Messages that are sent between client & server are JSON objects with a `type` attribute:
+
+```js
+{ "type": TYPE, ... }
+```
+
+We'll categorize messages by type and whether they are sent by the client or server:
+
+### Client: 'sub'
+### Client: 'unsub'
+### Client: 'entry'
+### Client: 'pong'
+
+### Server: 'sub'
+### Server: 'unsub'
+### Server: 'success'
+### Server: 'error'
+### Server: 'ping'
+
 ## Federation
 
 Coming Soon.
