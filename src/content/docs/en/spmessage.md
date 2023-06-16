@@ -34,7 +34,7 @@ Wherever hashes appear in the protocol, they are 32-byte [blake2b](https://www.b
 - `contractID` specifies the hash of the first message in the contract chain that this message is being sent to, or `null` if this is the first message.
 - `originatingContractID` if this is a message from one contract to another, this field specifies the `contractID` of the contract sending the message, and `null` otherwise.
 - `op` is a short string representation of one of the various [opcodes](opcodes) (e.g. `"c"` for [`OP_CONTRACT`](opcodes#op_contract)).
-- `manifest` is the [manifest hash](contract-manifest) of the contract code used to interpret this message.
+- `manifest` is the [manifest hash](contract-manifests) of the contract code used to interpret this message.
 - `nonce` is a [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) unique identifier for this message. Useful for uniquely identifying messages in the case where a message needs to be resent multiple times due to `previousHEAD` conflicts. See [Resending Messages](#resending-messages)
 
 ### Section: `message`

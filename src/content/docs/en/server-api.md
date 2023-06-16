@@ -9,6 +9,7 @@ In a Shelter Protocol app, the server component is the simplest part of the syst
 - File attachments
 - Registering usernames
 - Features related to the [zero-knowledge password protocol](zkpp)
+- Subscribing to events
 - Features related to federation
 - As well as other features (to be documented in future versions of this documentation)
 
@@ -24,9 +25,9 @@ API writing the JSON of an [`SPMessage`](spmessage) to end of a contract (or cre
 
 Returns HTTP Status `409 Conflict` if a message with the same `previousHEAD` already exists in the chain.
 
-### /eventsSince
+### /eventsAfter
 
-`GET /eventsSince/{contractID}/{since}`
+`GET /eventsAfter/{contractID}/{since}`
 
 ### /eventsBefore
 
@@ -85,6 +86,10 @@ See [ZKPP](zkpp) documentation for details.
 ### /zkpp/updatePasswordHash/{contract}
 
 `POST /zkpp/updatePasswordHash/{contract}`
+
+## Subscribing to Events
+
+The server runs a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) for broadcasting new messages to interested clients.
 
 ## Federation
 

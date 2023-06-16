@@ -4,6 +4,8 @@ export const SITE = {
 	defaultLanguage: 'en-US',
 } as const
 
+
+// TODO: update all of these URLs
 export const OPEN_GRAPH = {
 	image: {
 		src: 'https://github.com/withastro/astro/blob/main/.github/assets/banner.png?raw=true',
@@ -38,20 +40,21 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'Introduction', link: 'en/introduction' },
 			{ text: 'Key Concepts', link: 'en/key-concepts' },
 			{ text: 'Multiple Devices', link: 'en/multi-device' },
+			{ text: 'Message Processing', link: 'en/message-processing' },
 			{ text: 'Federation', link: 'en/federation' },
-			{ text: 'Real-world Apps', link: 'en/usecases' },
 			{ text: 'Security Evaluation', link: 'en/security' },
 			{ text: 'Implementations', link: 'en/implementations' },
 		],
 		'Examples': [
-			{ text: 'Identity Contract', link: 'en/identity-contract' }
+			{ text: 'Identity Contract', link: 'en/identity-contract' },
+			{ text: 'Real-world Apps', link: 'en/usecases' }
 		],
 		'Reference': [
 			{ text: 'SPMessage', link: 'en/spmessage' },
 			{ text: 'Opcodes', link: 'en/opcodes' },
 			{ text: 'Server API', link: 'en/server-api' },
 			{ text: 'Invite Keys', link: 'en/invite-keys' },
-			{ text: 'Contract Manifest', link: 'en/contract-manifest' },
+			{ text: 'Contract Manifests', link: 'en/contract-manifests' },
 			{ text: 'State Snapshots', link: 'en/state-snapshots' },
 			{ text: 'ZKPP', link: 'en/zkpp' },
 		],

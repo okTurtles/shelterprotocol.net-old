@@ -3,7 +3,9 @@ title: "Opcodes"
 description: "Shelter Protocol Opcodes Reference"
 ---
 
-All opcodes are wrapped using [`SPMessage`](spmessage). This document shows the possible values for `<op-value>`.
+All opcodes are wrapped using [`SPMessage`](spmessage). This document shows the possible values for `<op-value>`, as well as impacted client state.
+
+> ⚠︎ *This specification is beta quality. Anywhere there is a conflict between this specification and the first implementation of this specification (Chelonia) is a bug. Please let us know if you come across any contradictions between specification and Chelonia.*
 
 ### `OP_CONTRACT`
 
@@ -20,6 +22,10 @@ Creates a new contract, publicly specifying what type of contract it is, and inc
 
 For `<op-key-add>` definition, see value for [`OP_KEY_ADD`](#op_key_add).
 
+**Affected state:**
+
+- When clients receive `OP_CONTRACT`, they initialize an empty state for this contract instance. See ["Contract & VM State"](message-processing#contract--vm-state) for details.
+- The state is further updated according to the rules of [`OP_KEY_ADD`](#op_key_add) when processing `"keys"`.
 
 ### `OP_ACTION_UNENCRYPTED`
 
@@ -41,6 +47,10 @@ Invokes an action on the contract. Most contract messages will use either [`OP_A
 
 `"meta"` is useful for attaching metadata to action messages (for example, information about who sent the message, when it was sent, etc.).
 
+**Affected state:**
+
+- Actions typically directly alter the state of the contract by adding, updating, or removing keys from [the root contract state](message-processing#contract--vm-state). They typically do not result in modifications or interations with special state like `_vm` or `_volatile`.
+
 ### `OP_ACTION_ENCRYPTED`
 
 Converts the message data of [`OP_ACTION_UNENCRYPTED`](#op_action_unencrypted) into a JSON string using `JSON.stringify` and encrypts it using `"<keyId>"`.
@@ -54,6 +64,10 @@ Converts the message data of [`OP_ACTION_UNENCRYPTED`](#op_action_unencrypted) i
   "content": "<encryptedJSON>"
 }
 ```
+
+**Affected state:**
+
+- Same as [`OP_ACTION_UNENCRYPTED`](#op_action_unencrypted).
 
 ### `OP_KEY_ADD`
 
@@ -137,6 +151,13 @@ A few notes:
 - The `keyId` field specifies the key that was used to encrypt the data in `meta.private.content`
 - The special boolean `meta.private.shareable` attribute indicates whether the private key can be shared with another contract using [`OP_KEY_SHARE`](#op_key_share) (in response to [`OP_KEY_REQUEST`](#op_key_request))
 
+**Affected state:**
+
+- `_vm.authorizedKeys` (a dictionary) is always modified by adding the shared key data to `_vm.authorizedKeys[<keyId>]`.
+- `_volatile.keys` (a dictionary) is modified if `meta.private` can be decrypted by adding the serialized key (as a string) to `_volatile.keys[<keyId>]`
+- `_volatile.pendingKeyRequests` (an array) is modified by `OP_KEY_ADD` as part of sending a [`OP_KEY_REQUEST`](#op_key_request): before `OP_KEY_REQUEST` is sent, we call `OP_KEY_ADD` on the `originatingContractID`, and when that is processed `{ id, name: signingKey.name }` is pushed to `pendingKeyRequests`. That entry is cleared once we receive the corresponding [`OP_KEY_SHARE`](#op_key_share).
+- `_volatile.watch` (an array) has `[<keyName>, <externalContractID>]` pushed added to it for any foreign keys that need to be monitored.
+
 ### `OP_KEY_UPDATE`
 
 This operation can be used to rotate an existing key, and/or update key properties like `"purpose"` or `"permissions"`.
@@ -166,6 +187,10 @@ Any updates to `"purpose"` or `"permissions"` must be sctrictly more restrictive
 > - Contracts must not copy a foreign key's name into this contract, but instead should use a contextualized name. Example: when updating a foreign `#csk`, rename the key to: `<contractID>/#csk`.
 > - It is possible to see the same `OP_KEY_UPDATE` twice because two clients might broadcast it simultaneously. If this happens, `oldKeyId` will be missing in the contract state, and implementations should ignore the duplicate message.
 
+**Affected state:**
+
+- The same as [`OP_KEY_ADD`](#op_key_add), with the exception of `_volatile.pendingKeyRequests`, which should not be modified by this opcode.
+- `_vm.revokedKeys` (a dictionary) is updated to move the `oldKeyId` from `_vm.authorizedKeys` into `_vm.revokedKeys`, so that future clients syncing the state are still able to decrypt old messages.
 
 ### `OP_KEY_DEL`
 
@@ -180,6 +205,11 @@ Specifies an array of keyIds to delete from the contract. Deleted keys can no lo
 Note that if a key is deleted, any contracts listening for updates to this key via [`foreignKey`](#op_key_add) will stop listening.
 
 > ⚠︎ When mirroring `foreignKey` updates, it is possible to see the same `OP_KEY_DEL` twice because two clients might broadcast it simultaneously. If this happens, the key being deleted won't exist anymore, and implementations should ignore the duplicate message.
+
+**Affected state:**
+
+- `_vm.authorizedKeys[<keyId>]` is removed.
+- `_volatile.watch` has any entries with the name of this key removed.
 
 ### `OP_KEY_REQUEST`
 
@@ -207,6 +237,10 @@ A few notes:
 - In the `"data"` portion, `+` means "concatinate with `|`". This means that none of the concatinated elements should themselves contain the `|` character.
 - Only keys marked `"shareable": true` can be requested. See [`OP_KEY_ADD`](#op_key_add) for details.
 
+**Affected state:**
+
+- `_vm.pendingKeyshares` (a dictionary) is modified by adding a key/value pair where the key is this message's hash, and the value is an array `[<originatingContractID>, <previousHEAD>, <messageData>]`.
+
 ### `OP_KEY_REQUEST_SEEN`
 
 The actual response to a properly formatted and authorized `OP_KEY_REQUEST` is an [`OP_KEY_SHARE`](#op_key_share) message, not `OP_KEY_REQUEST_SEEN`. However, because Shelter Protocol is an end-to-end encrypted protocol, it relies on end-user devices to send `OP_KEY_SHARE` messages whenever they are online and able to. Therefore, in order to prevent multiple `OP_KEY_SHARE` messages from being sent, we need a way to mark a key request as being responded to. This is the purpose of `OP_KEY_REQUEST_SEEN`.
@@ -223,6 +257,10 @@ The actual response to a properly formatted and authorized `OP_KEY_REQUEST` is a
 Note that unlike `OP_KEY_SHARE`, `OP_KEY_REQUEST_SEEN` is sent to the contract that is responding to the `OP_KEY_REQUEST`.
 
 It's theoretically possible that for some reason a client wasn't able to send `OP_KEY_SHARE` but was able to send `OP_KEY_REQUEST_SEEN`. For example, the requesting contract might have been deleted. In this rare case `"success"` would be set to `false`. It is up to client implementations to decide how many unsuccessful attempts they will tolerate before giving up. To avoid bloating the contract chain, we recommend a 3-strike rule, and no more than 5 unsuccessful attempts.
+
+**Affected state:**
+
+- `_vm.pendingKeyshares` (a dictionary) has the mapping for key `keyRequestHash` removed.
 
 ### `OP_KEY_SHARE`
 
@@ -259,6 +297,11 @@ Notes:
 - `<encryptionKeyId>` is the key used to encrypt `content`, and it is the same `encryptionKeyId` as the one sent in the corresponding `OP_KEY_REQUEST`.
 - `keyRequestHash` is included if this `OP_KEY_SHARE` is being sent in response to an `OP_KEY_REQUEST` message.
 
+**Affected state:**
+
+- `_volatile.keys` (a dictionary) for the contract `"contractID"` is set with the key/value pair `<keyId>` and the decrypted `meta.private.content`.
+- `_volatile.pendingKeyRequests` (an array) has the corresponding key request removed.
+
 ### `OP_PROP_SET`
 
 Sets key-value property pairs on this contract.
@@ -275,6 +318,10 @@ Sets key-value property pairs on this contract.
 
 This can be useful for configuring protocol features like [state snapshots](state-snapshots).
 
+**Affected state:**
+
+- TBD. Most likely `_vm.props` (a dictionary).
+
 ### `OP_PROP_DEL`
 
 Removes key-value property pairs from this contract.
@@ -284,6 +331,10 @@ Removes key-value property pairs from this contract.
 ```json
 ["<key1>", "<key2>", ... ]
 ```
+
+**Affected state:**
+
+- TBD. Most likely `_vm.props` (a dictionary).
 
 ### `OP_WRITE_REQUEST`
 
@@ -312,6 +363,11 @@ Requests permission to write to a contract. The only opcode that is allowed to b
   - Clients and servers should enforce strict limits for the length of values for the fields of the key's `meta` data.
 - `keyShare` - optionally offers to share a private key via [`OP_KEY_SHARE`](#op_key_share), if approved. Clients and servers should enforce strict limits on the length of values for the fields of the key's `meta` data.
 
+**Affected state:**
+
+- TBD. Most likely something under `_vm`.
+- Additionally, any state affected by [`OP_KEY_ADD`](#op_key_add) and [`OP_KEY_SHARE`](#op_key_share).
+
 ### `OP_WRITE_REQUEST_RESPONSE`
 
 Approves or rejects a prior [`OP_WRITE_REQUEST`](#op_write_request).
@@ -330,6 +386,10 @@ The contract that sent `OP_WRITE_REQUEST` should be monitoring this contract for
 - `requestHash` is the message hash of the corresponding [`OP_WRITE_REQUEST`](#op_write_request).
 - `approved` - if `true`, processes any `keyAdd` and `keyShare` instructions from the corresponding request.
 
+**Affected state:**
+
+- TBD. Most likely something under `_vm`.
+
 ### `OP_ATOMIC`
 
 Combines several opcodes into one and applies them sequentially. If any operation fails, the entire operation fails and the state is reverted.
@@ -345,3 +405,7 @@ Combines several opcodes into one and applies them sequentially. If any operatio
   // ...
 ]
 ```
+
+**Affected state:**
+
+- The corresponding affected state of each included opcode.

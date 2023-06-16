@@ -29,9 +29,11 @@ The concept of a "list of events" is fundamental in computer science. At their l
 
 To this basic concept of "list of events" we can add fancy terms to sound smart: "smart contracts", "virtual machines", "git", "blockchains", "classes", etc. All of these ideas can be represented as a list of events.
 
-The first event defines and initializes the contract (or "class instance" in OOP terms). Each subsequent event invokes actions that update the state for that contract instance. Because developers make mistakes, contracts are upgradeable, and every event [references the specific version](#contract-manifests) of the contract that should be used to interpret that event. This guarantees that the final state that results from processing all of the events will be the same no matter when the events are processed.
+The first event defines and initializes the contract (or "class instance" in OOP terms). Each subsequent event invokes actions that [update the state](message-processing) for that contract instance. Because developers make mistakes, contracts are upgradeable, and every event [references the specific version](#contract-manifests) of the contract that should be used to interpret that event. This guarantees that the final state that results from processing all of the events will be the same no matter when the events are processed.
 
 Contracts are referenced by their `contractID`, which is equal to the hash of the first message in the contract chain.
+
+📚 [**Message Processing**](message-processing)
 
 ### Key-value Store
 
@@ -58,7 +60,7 @@ When contracts are loaded by the client, they are loaded first by specifying the
 
 Every `SPMessage` references the specific manifest used to interpret it. This allows contract chains to be upgraded over time while ensuring a deterministic state. Old messages in the chain will always be interpreted using the correct version of the contract.
 
-📚 [**Reference: Contract Manifest**](contract-manifest)
+📚 [**Reference: Contract Manifest**](contract-manifests)
 
 ### Opcodes
 
