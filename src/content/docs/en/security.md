@@ -16,7 +16,7 @@ The best way to mitigate against this is to use a password manager that generate
 
 ### Weak Passwords
 
-If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), then accounts could be compromised if passwords are easily guessed, or, in the case of password reuse, could be compromised if the user had an account on another server that was compromised and reused that password on their account that is using Shelter Protocol.
+If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), then accounts could be compromised if passwords are easily guessed, or, in the case of password reuse, could be compromised if the user had an account on another server that was compromised and reused that password on their account using Shelter Protocol.
 
 The best way to mitigate against this is to use a password manager that generates strong random passwords for you.
 
