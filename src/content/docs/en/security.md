@@ -12,6 +12,10 @@ Quantum computers or flaws in ECC implementation or design. To mitigate against 
 
 If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), servers will have access to password salts and therefore will be able to attempt to brute force weak passwords.
 
+### Weak Passwords
+
+If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), then accounts could be compromised by either the server brute forcing the password (as mentioned above), or, in the case of password reuse, could be compromised if the user had an account on another server that was compromised, and reused that password on their account that is using Shelter Protocol.
+
 ### Malicious JavaScript
 
 If the server is responsible for distributing the app itself, then it could inject malicious JavaScript to compromise the protocol. Alternatively, malicious JavaScript could be injected by [an HTTPS Man-in-the-Middle](https://www.youtube.com/watch?v=IjbzIV5ElCY) or by [browser extensions](https://www.youtube.com/watch?v=cIGESSm39n4).
