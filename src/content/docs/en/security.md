@@ -12,13 +12,13 @@ Quantum computers or flaws in ECC implementation or design. To mitigate against 
 
 If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), servers will have access to password salts and therefore will be able to attempt to brute force weak passwords.
 
-The best way to mitigate against this is to use a password manager.
+The best way to mitigate against this is to use a password manager that generates strong random passwords for you.
 
 ### Weak Passwords
 
 If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), then accounts could be compromised by either the server brute forcing the password (as mentioned above), or, in the case of password reuse, could be compromised if the user had an account on another server that was compromised, and reused that password on their account that is using Shelter Protocol.
 
-The best way to mitigate against this is to use a password manager.
+The best way to mitigate against this is to use a password manager that generates strong random passwords for you.
 
 ### Malicious JavaScript
 
