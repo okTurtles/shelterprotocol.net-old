@@ -91,7 +91,7 @@ See [ZKPP](zkpp) documentation for details.
 
 The server runs a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) for broadcasting new messages to interested clients.
 
-Messages that are sent between client & server are JSON objects with a `type` attribute:
+Messages sent between client & server are JSON objects with a `type` attribute:
 
 ```js
 { "type": TYPE, ... }
@@ -100,15 +100,76 @@ Messages that are sent between client & server are JSON objects with a `type` at
 We'll categorize messages by type and whether they are sent by the client or server:
 
 ### Client: 'sub'
+
+```json
+{ "type": "sub", "contractID": "<contractID>", "dontBroadcast": true | false }
+```
+
+Client subscribes to a contract for subsequent [`"entry"`](#server-entry) events.
+
 ### Client: 'unsub'
-### Client: 'entry'
+
+```json
+{ "type": "sub", "contractID": "<contractID>", "dontBroadcast": true | false }
+```
+
 ### Client: 'pong'
 
+```json
+{ "type": "pong", "data": "<copy-of-server-ping-data>" }
+```
+
+Client responds to server `"ping"` by echoing `"data"` back to it.
+
 ### Server: 'sub'
+
+```json
+{ "type": "sub", "data": { "contractID": "<contractID>", "socketID": "<socketID>" } }
+```
+
+Server notifies clients already subscribed to `"contractID"` of a new subscriber.
+
 ### Server: 'unsub'
+
+```json
+{ "type": "unsub", "data": { "contractID": "<contractID>", "socketID": "<socketID>" } }
+```
+
+Server notifies clients already subscribed to `"contractID"` of an unsubscriber.
+
+### Server: 'entry'
+
+```json
+{ "type": "entry", "data": "<spmessage-json>" }
+```
+
+Server broadcasts an [`SPMessage`](spmessage) to subscribers of a contract.
+
 ### Server: 'success'
+
+```json
+{ "type": "success", "data": { "type": "sub" | "unsub", "contractID": "<contractID>" } }
+```
+
+Server response to client's request to subscribe or unsubscribe to a `"contractID"` upon success.
+
 ### Server: 'error'
+
+```json
+{ "type": "error", "data": <client-data> }
+```
+
+Server response to client's request to subscribe or unsubscribe to a `"contractID"` upon failure.
+
+`"data"` contains a copy of the `"data"` sent by the client.
+
 ### Server: 'ping'
+
+```json
+{ "type": "ping", "data": <unix-ms> }
+```
+
+Server sends ping to clients so that they can detect connection issues. `"data"` contains value returned by [`Date.now()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now).
 
 ## Federation
 
