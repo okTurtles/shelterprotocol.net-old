@@ -9,11 +9,13 @@ In a Shelter Protocol app, the server component is the simplest part of the syst
 - File attachments
 - Registering usernames
 - Features related to the [zero-knowledge password protocol](zkpp)
-- Subscribing to events
+- Subscribing to events via WebSocket
 - Features related to federation
 - As well as other features (to be documented in future versions of this documentation)
 
 This page describes those APIs.
+
+> ⚠︎ *This specification is beta quality. Anywhere there is a conflict between this specification and the first implementation of this specification (Chelonia) is a bug. Please let us know if you come across any contradictions between specification and Chelonia.*
 
 ## Writing & Reading Contracts
 
@@ -87,11 +89,11 @@ See [ZKPP](zkpp) documentation for details.
 
 `POST /zkpp/updatePasswordHash/{contract}`
 
-## Subscribing to Events
+## WebSocket API
 
-The server runs a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) for broadcasting new messages to interested clients.
+The server runs a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) for broadcasting new [messages](spmessage) to interested clients.
 
-Messages sent between client & server are JSON objects with a `type` attribute:
+Messages sent between client & server are JSON objects with a `type` attribute. Note that [messages](spmessage) are broadcast from the client to the server using the RESTful API [`POST /event`](#event), not via WebSocket.
 
 ```js
 { "type": TYPE, ... }
