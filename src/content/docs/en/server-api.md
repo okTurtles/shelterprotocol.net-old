@@ -30,6 +30,8 @@ If there is a conflict, returns HTTP Status `409 <latestHEAD> <height>`, if a me
 
 `GET /eventsAfter/{contractID}/{since}`
 
+NOTE: when synchronizing a contract, clients should call [`GET /latestHash`](#latesthash) to get the latest hash of a `contractID` and verify that at least one of the messages returned by this API has a hash equal to the hash returned by `/latestHash/{contractID}`.
+
 ### /eventsBefore
 
 `GET /eventsBefore/{before}/{limit}`
