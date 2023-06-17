@@ -8,17 +8,19 @@ Message processing begins either when clients receive an [`SPMessage`](spmessage
 
 The events in a contract chain are processed in the order they appear in the contract, to build up a consistent shared state across clients (although in some cases, [it is possible for clients to arrive at slightly different state](#inconsistent-state)).
 
+A contract chain is instantiated using [`OP_CONTRACT`](opcodes#op_contract). From that point on, [other opcodes](opcodes) are added in an append-only manner, and processed in turn.
+
 <img src={spmessageRef} alt="Simple diagram showing two SPMessages, the first OP_CONTRACT, the next, OP_ACTION_ENCRYPTED" class="center" />
 
-A contract chain is instantiated using [`OP_CONTRACT`](opcodes#op_contract). From that point on, [other opcodes](opcodes) are added in an append-only manner, and processed in turn.
+> 💡 The arrows in the picture above point right to indicate which message comes next in the contract chain, but in reality the connections are actually backwards, with each new message pointing to the previous message by referencing it using [`previousHEAD`](spmessage). The server keeps track of the latest message for any given contract by storing the latest message hash under a special key in the database. Chelonia uses `head=<contractID>`.
 
 ### Client-side Processing
 
 Message processing consists of the following steps on the client:
 
 1. Verifies it is expecting this message (because it's part of a contract that it [subscribed to](server-api#client-sub)).
-2. (Optionally) stores a copy of the message to its local key-value database.
-3. Temporarily saves a copy of the entire local contract state (in case the next steps fail).
+2. (Optionally) stores a copy of the message to its local key-value database (if a "full node").
+3. Temporarily saves a copy of the entire local contract state (in case the next step fails).
 4. Processes the message [opcode](opcodes), modifying local contract state as needed.
   - If this step fails, it reverts all mutations using the state that was saved in (3), emits errors as needed, skips further steps, and continues processing any other messages.
 5. Executes any contract side effects.
@@ -26,27 +28,40 @@ Message processing consists of the following steps on the client:
 
 > ⚠︎ During the **processing** step, contracts can only access state that comes from the contract itself, or the data that is passed in along with the opcode. The boundary between a contract and the rest of the application occurs in **side effects**.
 
-### Side effects
+### Side Effects
 
+In order to ensure a consistent contract state is reproduced among clients in a decentralized way, contract code that modifies contract state must not be able to interact with application code in any way (since local application state might be different from client-to-client). This means that during processing (step 4 above), contract mutations cannot read application data, nor can they interact with application code (or other contracts) in any way, nor can they perform any asynchronous actions.
 
+However, sometimes we *want* our contracts to be able to interact with our application code (or other contracts) and trigger activity upon receiving some action. To facilitate this, Shelter Protocol specifies that contracts can specify a separate processing step called *side effects*.
+
+Side effects are able to read application data and cause the application to perform new activity (asynchronous or not). The one thing side effects *cannot* do is modify contract state. This ensures that even if the side effects behave differently across clients, the contract state will remain consistent.
+
+There is one situation where inconsistent state is still possible, and that is covered next.
 
 ### Inconsistent State
 
-In some circumstances it is possible for different clients to build up a different state for the same contract than other clients.
+In order to facilitate certain features, Shelter Protocol attempts to decrypt messages using *all* private keys that are available to the client, including keys from other contracts. For example, it can be useful for clients to decrypt some information stored in an identity contract (like a display name or profile picture), but not be able to read all of the information stored on someone else's identity contract. However, this opens the door for inconsistent contract state across clients.
 
-Specifically, this can happen when messages sent using [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) are encrypted using keys that **Client A** has, but **Client B** does not have. In that case, **Client A** will be able to decrypt and process the message, but **Client B** will not.
+When messages sent using [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) are encrypted using keys that **Client A** has that **Client B** does not have, inconsistent client state is the result. **Client A** will be able to decrypt and process all messages, but **Client B** might only be able to decrypt some of them, leading to partially inconsistent state.
+
+It is up to developers to be aware of such possibilities and handle them accordingly.
 
 ### Contract & VM State
 
-Special keys begin with a `_`, these are managed by Shelter Protocol implementations and are not set by developers. Two special keys defined by the protocol are:
+Special keys on contract state are prefixed with `_`. These are managed by Shelter Protocol implementations and must not set by developers. Currently, two special keys are defined:
 
-- `_vm` —
-- `_volatile` — not stored in snapshots.
+- `_vm` — is used to store various metadata critical to interpreting messages that also needs to be sync'd across clients. For example, `_vm.authorizedKeys` stores keys that are used to verify message signatures.
+- `_volatile` — Is used to store client-local information relevant to a contract that doesn't make sense to store publicly. For example, `_volatile.keys` is used to store private keys that decrypt messages. This key is not stored in [state snapshots](state-snapshots).
+
+See the [opcodes](opcodes) documentation for more details of what is stored on `_vm` and `_volatile`.
 
 TODO/TBD: specify how secret keys are handled in snapshots.
 
 ### Sandbox
 
+All message contracts and loaded in a sandbox by the client. This makes it safe for clients to view the state of arbitrary contracts.
+
+🚧 This section is under construction. 🚧
 
 ### Server-side Processing
 

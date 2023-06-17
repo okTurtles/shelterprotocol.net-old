@@ -156,7 +156,7 @@ A few notes:
 - `_vm.authorizedKeys` (a dictionary) is always modified by adding the shared key data to `_vm.authorizedKeys[<keyId>]`.
 - `_volatile.keys` (a dictionary) is modified if `meta.private` can be decrypted by adding the serialized key (as a string) to `_volatile.keys[<keyId>]`
 - `_volatile.pendingKeyRequests` (an array) is modified by `OP_KEY_ADD` as part of sending a [`OP_KEY_REQUEST`](#op_key_request): before `OP_KEY_REQUEST` is sent, we call `OP_KEY_ADD` on the `originatingContractID`, and when that is processed `{ id, name: signingKey.name }` is pushed to `pendingKeyRequests`. That entry is cleared once we receive the corresponding [`OP_KEY_SHARE`](#op_key_share).
-- `_volatile.watch` (an array) has `[<keyName>, <externalContractID>]` pushed added to it for any foreign keys that need to be monitored.
+- `_volatile.watch` (an array) has `[<keyName>, <externalContractID>]` added to it, to indicate that some other contract `<externalContractID>` has this `<keyName>` as a foreign key on it, so that we can push updates to back it.
 
 ### `OP_KEY_UPDATE`
 

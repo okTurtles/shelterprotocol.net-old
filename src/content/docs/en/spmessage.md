@@ -14,7 +14,8 @@ The fundamental building block of the Shelter Protocol, `SPMessage`, is composed
     "originatingContractID": null | "<contractID>",
     "op": "<opcode>",
     "manifest": "<manifest-hash>",
-    "nonce": "<uuidv4>"
+    "uuid": "<uuidv4>",
+    "height": <uint>
   }),
   "message": JSON.stringify(<op-value>),
   "sig": {
@@ -35,7 +36,8 @@ Wherever hashes appear in the protocol, they are 32-byte [blake2b](https://www.b
 - `originatingContractID` if this is a message from one contract to another, this field specifies the `contractID` of the contract sending the message, and `null` otherwise.
 - `op` is a short string representation of one of the various [opcodes](opcodes) (e.g. `"c"` for [`OP_CONTRACT`](opcodes#op_contract)).
 - `manifest` is the [manifest hash](contract-manifests) of the contract code used to interpret this message.
-- `nonce` is a [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) unique identifier for this message. Useful for uniquely identifying messages in the case where a message needs to be resent multiple times due to `previousHEAD` conflicts. See [Resending Messages](#resending-messages)
+- `uuid` is a [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) unique identifier for this message. Useful for uniquely identifying messages in case of `previousHEAD` conflicts. See [Resending Messages](#resending-messages).
+- `height` is an counter starting at `0` that gets incremented by `1` with each new message added to the chain. Useful in certain situations related to validating message signatures on rotated keys.
 
 ### Section: `message`
 
@@ -61,7 +63,7 @@ Generating the signature:
 
 ### Content Addressing
 
-As mentioned, messages are referenced by their 32-byte blake2b multihash. Implementations should take care to verify that all received messages have the appropriate hash.
+As mentioned, messages stored and referenced by their 32-byte blake2b [`multihash`](https://multiformats.io/multihash/) in order to ensure historical message integrity. Implementations should take care to verify that all received messages have the appropriate hash.
 
 For example, contracts are sync'd by specifying their `contractID`. Implementations must make sure that when a `contractID` is newly synced, the first message actually does have a hash matching that `contractID`.
 
@@ -71,8 +73,8 @@ During syncing of latest messages, clients should make sure to verify that hash 
 
 ### Resending Messages
 
-Messages are usually identified in a content-addressable way: by the hash of the entire message JSON. That is how they're stored on the server (and optionally, on the client as well).
+Messages are sent to the server using the [`POST /event`](server-api#event) API. However, a conflict with the [`previousHEAD`](spmessage#section-head) value could occur if someone else sent a message at the same time. In such situations we would want to reconstruct the message using the correct `previousHEAD` and resend it (repeating several times at random intervals until the message makes it in or we give up). The `POST /event` API conveniently gives us the latest message hash and height so that we can immediately recreate and resend the message upon conflict.
 
-However, in some situations it might be more useful to identify a message by its `nonce` value. Take, for example, the case where you are sending a message to a chatroom and want to perform an action upon receiving that message back.
+Usually we identify messages by their hash, but sometimes we want to know when a message we've sent makes it back to us in order to take some type of action. For example, when a user sends a message to a chatroom we might want to display it in grey until we receive it back.
 
-In this situation, it's possible that the message will need to be recreated multiple times before it is successfully sent. This happens when another message makes it into the chain before ours, changing the value we need to use for `previousHEAD`. In that case we would resend the message with the same data except for a different `previousHEAD`. If this is done for us by the underlying framework, we may not be able to setup proper event listeners because we won't know what message hash to listen for. Instead, we can setup an event listener that expects a message with the same `nonce` to be sent back to us and handle things from there.
+In this situation, it's possible that the message will need to be recreated multiple times before it is successfully sent, resulting in a different message hash. If we set up event listeners related to the original message hash, they might never get run because a message with a different hash could be the one to actually make it in to the chain. For these types of situations the message [`uuid`](spmessage#section-head) can be used as it remains consistent between recreated messages.

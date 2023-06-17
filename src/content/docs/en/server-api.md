@@ -3,15 +3,14 @@ title: "Server API"
 description: "Server API for the Shelter Protocol"
 ---
 
-In a Shelter Protocol app, the server component is the simplest part of the system, containing the least amount of code. However, some server API is needed to enable specific features:
+In a Shelter Protocol app, the server component is the simplest part of the system, containing the least amount of code, as most logic is stored on the client. However, some server API is needed to enable specific features:
 
 - Writing and reading contract chains
 - File attachments
 - Registering usernames
 - Features related to the [zero-knowledge password protocol](zkpp)
 - Subscribing to events via WebSocket
-- Features related to federation
-- As well as other features (to be documented in future versions of this documentation)
+- Secure key-value store
 
 This page describes those APIs.
 
@@ -25,7 +24,7 @@ This page describes those APIs.
 
 API writing the JSON of an [`SPMessage`](spmessage) to end of a contract (or creating a new contract). The body is just the JSON of the `SPMessage`.
 
-Returns HTTP Status `409 Conflict` if a message with the same `previousHEAD` already exists in the chain.
+If there is a conflict, returns HTTP Status `409 <latestHEAD> <height>`, if a message with the same `previousHEAD` already exists in the chain. Includes both the latest message hash and message height so that we can immediately reconstruct and [resend the message](spmessage#resending-messages).
 
 ### /eventsAfter
 
@@ -173,7 +172,8 @@ Server response to client's request to subscribe or unsubscribe to a `"contractI
 
 Server sends ping to clients so that they can detect connection issues. `"data"` contains value returned by [`Date.now()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now).
 
-## Federation
+## Secure Key-Value Store
 
-Coming Soon.
+All server data, including contracts and files, are stored in a key-value store. Shelter Protocol provides an API for directly interacting with this key-value store in a secure way. For example, you might want to restrict some keys from being written to, or read from, to specific entities or groups.
 
+Coming soon.
