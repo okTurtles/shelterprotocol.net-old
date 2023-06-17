@@ -19,12 +19,14 @@ A contract chain is instantiated using [`OP_CONTRACT`](opcodes#op_contract). Fro
 Message processing consists of the following steps on the client:
 
 1. Verifies it is expecting this message (because it's part of a contract that it [subscribed to](server-api#client-sub)).
-2. (Optionally) stores a copy of the message to its local key-value database (if a "full node").
+2. Verifies the message builds upon the previous one we've seen and optionally stores a copy of the message to its local key-value database (if a "full node").
+    - If the message does not build upon the most recent message we've seen for this contract, it is discarded and an attempt to "reingest" it is made by syncing the contract on the assumption that there are messages between the last one we saw and this message.
 3. Temporarily saves a copy of the entire local contract state (in case the next step fails).
 4. Processes the message [opcode](opcodes), modifying local contract state as needed.
-  - If this step fails, it reverts all mutations using the state that was saved in (3), emits errors as needed, skips further steps, and continues processing any other messages.
-5. Executes any contract side effects.
-  - If there are any errors during side effect execution, inform the user's code and proceed with processing further messages.
+    - If this step fails, it reverts all mutations using the state that was saved in (3), emits errors as needed, and skips executing side effects.
+5. Updates the most recent hash that we've seen for this contract (aka "contract HEAD") to equal the hash of this message.
+6. Executes any contract side effects.
+    - If there are any errors during side effect execution, inform the user's code and proceed with processing further messages.
 
 > ⚠︎ During the **processing** step, contracts can only access state that comes from the contract itself, or the data that is passed in along with the opcode. The boundary between a contract and the rest of the application occurs in **side effects**.
 
