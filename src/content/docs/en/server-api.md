@@ -130,7 +130,7 @@ Client responds to server `"ping"` by echoing `"data"` back to it.
 { "type": "sub", "data": { "contractID": "<contractID>", "socketID": "<socketID>" } }
 ```
 
-Server notifies clients already subscribed to `"contractID"` of a new subscriber.
+Server notifies clients already subscribed to `"contractID"` of a new subscriber, if they did not specify `"dontBroadcast": true`.
 
 ### Server: 'unsub'
 
@@ -138,7 +138,7 @@ Server notifies clients already subscribed to `"contractID"` of a new subscriber
 { "type": "unsub", "data": { "contractID": "<contractID>", "socketID": "<socketID>" } }
 ```
 
-Server notifies clients already subscribed to `"contractID"` of an unsubscriber.
+Server notifies clients already subscribed to `"contractID"` of an unsubscriber, if they did not specify `"dontBroadcast": true`.
 
 ### Server: 'entry'
 
@@ -154,17 +154,15 @@ Server broadcasts an [`SPMessage`](spmessage) to subscribers of a contract.
 { "type": "success", "data": { "type": "sub" | "unsub", "contractID": "<contractID>" } }
 ```
 
-Server response to client's request to subscribe or unsubscribe to a `"contractID"` upon success.
+Server response to client's request to subscribe or unsubscribe to a `"contractID"` upon success, includes a copy of the data the client sent.
 
 ### Server: 'error'
 
 ```json
-{ "type": "error", "data": <client-data> }
+{ "type": "error", "data": { "type": "sub" | "unsub", "contractID": "<contractID>" } }
 ```
 
-Server response to client's request to subscribe or unsubscribe to a `"contractID"` upon failure.
-
-`"data"` contains a copy of the `"data"` sent by the client.
+Server response to client's request to subscribe or unsubscribe to a `"contractID"` upon failure, includes a copy of the data the client sent.
 
 ### Server: 'ping'
 
