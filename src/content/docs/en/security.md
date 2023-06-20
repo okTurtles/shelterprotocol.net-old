@@ -10,13 +10,13 @@ Quantum computers or flaws in ECC implementation or design. To mitigate against 
 
 ### Malicious Server Brute Forcing Password
 
-If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), servers will have access to password salts and therefore will be able to attempt to brute force weak passwords.
+If, instead of using [unique keys per device](/en/multi-device#unique-keys-per-device), developers use [password salts](/en/multi-device#using-salts-to-derive-private-keys-securely), servers will have access to password salts and therefore will be able to attempt to brute force weak passwords.
 
 The best way to mitigate against this is to use a password manager that generates strong random passwords for you.
 
 ### Weak Passwords
 
-If, instead of using [unique keys per device](multi-device#unique-keys-per-device), developers use [password salts](multi-device#using-salts-to-derive-private-keys-securely), then accounts could be compromised if passwords are easily guessed, or, in the case of password reuse, could be compromised if the user had an account on another server that was compromised and reused that password on their account using Shelter Protocol.
+If, instead of using [unique keys per device](/en/multi-device#unique-keys-per-device), developers use [password salts](/en/multi-device#using-salts-to-derive-private-keys-securely), then accounts could be compromised if passwords are easily guessed, or, in the case of password reuse, could be compromised if the user had an account on another server that was compromised and reused that password on their account using Shelter Protocol.
 
 The best way to mitigate against this is to use a password manager that generates strong random passwords for you.
 
@@ -32,7 +32,7 @@ The best way to mitigate against these types of attacks is for developers to avo
 
 ### Malicious Contracts & Sandbox Escape
 
-If Shelter Protocol implementations incorrectly implement their [sandbox](message-processing#sandbox), then it's possible that malicious contracts loaded by users could result in compromised data. To mitigate against this, make sure to conduct security audits of sandbox approaches and only load contracts from trusted developers.
+If Shelter Protocol implementations incorrectly implement their [sandbox](/en/message-processing#sandbox), then it's possible that malicious contracts loaded by users could result in compromised data. To mitigate against this, make sure to conduct security audits of sandbox approaches and only load contracts from trusted developers.
 
 ### Compromised End-User Devices
 

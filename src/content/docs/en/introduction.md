@@ -43,4 +43,4 @@ And Related Components:
 - **A Namespace For Mapping Usernames To Identity Contracts**
 - **A Zero-Knowledge Protocol For Storing & Retrieving Password Salts**
 
-Learn more about the [Key Concepts](key-concepts).
+Learn more about the [Key Concepts](/en/key-concepts).

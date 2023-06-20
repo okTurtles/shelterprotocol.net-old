@@ -3,7 +3,7 @@ title: "Opcodes"
 description: "Shelter Protocol Opcodes Reference"
 ---
 
-All opcodes are wrapped using [`SPMessage`](spmessage). This document shows the possible values for `<op-value>`, as well as impacted client state.
+All opcodes are wrapped using [`SPMessage`](/en/spmessage). This document shows the possible values for `<op-value>`, as well as impacted client state.
 
 > ⚠︎ *This specification is beta quality. Anywhere there is a conflict between this specification and the first implementation of this specification (Chelonia) is a bug. Please let us know if you come across any contradictions between specification and Chelonia.*
 
@@ -24,7 +24,7 @@ For `<op-key-add>` definition, see value for [`OP_KEY_ADD`](#op_key_add).
 
 **Affected state:**
 
-- When clients receive `OP_CONTRACT`, they initialize an empty state for this contract instance. See ["Contract & VM State"](message-processing#contract--vm-state) for details.
+- When clients receive `OP_CONTRACT`, they initialize an empty state for this contract instance. See ["Contract & VM State"](/en/message-processing#contract--vm-state) for details.
 - The state is further updated according to the rules of [`OP_KEY_ADD`](#op_key_add) when processing `"keys"`.
 
 ### `OP_ACTION_UNENCRYPTED`
@@ -49,7 +49,7 @@ Invokes an action on the contract. Most contract messages will use either [`OP_A
 
 **Affected state:**
 
-- Actions typically directly alter the state of the contract by adding, updating, or removing keys from [the root contract state](message-processing#contract--vm-state). They typically do not result in modifications or interations with special state like `_vm` or `_volatile`.
+- Actions typically directly alter the state of the contract by adding, updating, or removing keys from [the root contract state](/en/message-processing#contract--vm-state). They typically do not result in modifications or interations with special state like `_vm` or `_volatile`.
 
 ### `OP_ACTION_ENCRYPTED`
 
@@ -104,7 +104,7 @@ For example, every contract should have a `CSK` (`Contract Signing Key`, marked 
 
 - `#csk`: as mentioned, this key is used to represent the contract itself, and is especially important when it comes to cross-contract communication via `"foreignKey"`
 - `#cek`: this is the `Contract Encryption Key`. It is a key that is most often used to encrypt data within the contract. Contracts that wish to send encrypted data to this contract will use the `#cek`.
-- `#inviteKey-`: is used to define [invite keys for creating and joining groups.](invite-keys)
+- `#inviteKey-`: is used to define [invite keys for creating and joining groups.](/en/invite-keys)
 
 `"purpose"` is an array of strings that state the key's purpose. Typically this will be either `"sign"` (for signing messages), or `"enc"` for encrypting/decrypting messages, or it could be both. Other arbitrary values are allowed too if they are useful to protocol implementers.
 
@@ -215,7 +215,7 @@ Note that if a key is deleted, any contracts listening for updates to this key v
 
 Allows contracts to request private keys from other contracts (shared via [`OP_KEY_SHARE`](#op_key_share)).
 
-A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used to create a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](invite-keys).
+A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used to create a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](/en/invite-keys).
 
 TODO: add note that it adds keys with KEY_REQUEST_SEEN perms
 
@@ -316,7 +316,7 @@ Sets key-value property pairs on this contract.
 ]
 ```
 
-This can be useful for configuring protocol features like [state snapshots](state-snapshots).
+This can be useful for configuring protocol features like [state snapshots](/en/state-snapshots).
 
 **Affected state:**
 

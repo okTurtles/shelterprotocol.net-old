@@ -30,11 +30,11 @@ Shelter Protocol says, "Hey, passwords aren't going anywhere. They're cool. They
 
 We can derive the secret key directly from the password. This allows users to log in on any device without needing QR codes. To help protect against brute force attacks, we can use a random [*password salt*](https://en.wikipedia.org/wiki/Salt_(cryptography)). One question remains: how do we retrieve the salt from the server on a brand new device without revealing our password to the server?
 
-For this, Shelter Protocol introduces a [zero-knowledge sub-protocol for storing and retrieving passwords salts](zkpp). This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to login from any device using just their username and password. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
+For this, Shelter Protocol introduces a [zero-knowledge sub-protocol for storing and retrieving passwords salts](/en/zkpp). This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to login from any device using just their username and password. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
 
 The downside of this approach is that while we protect the secret key from being easilly brute forced by outsiders, the server itself can still attempt to brute force the password.
 
-📚 [**Reference: ZKPP**](zkpp)
+📚 [**Reference: ZKPP**](/en/zkpp)
 
 ### Unique Keys Per Device
 
@@ -42,13 +42,13 @@ It is possible to use Shelter Protocol with a UKPD approach if desired.
 
 Shelter Protocol defines the following primitives for key management and key sharing:
 
-- [`OP_KEY_ADD`](opcodes#op_key_add)
-- [`OP_KEY_UPDATE`](opcodes#op_key_update)
-- [`OP_KEY_DEL`](opcodes#op_key_del)
-- [`OP_KEY_REQUEST`](opcodes#op_key_request)
-- [`OP_KEY_REQUEST_SEEN`](opcodes#op_key_request_seen)
-- [`OP_KEY_SHARE`](opcodes#op_key_share)
-- [`OP_WRITE_REQUEST`](opcodes#op_write_request)
-- [`OP_WRITE_REQUEST_RESPONSE`](opcodes#op_write_request_response)
+- [`OP_KEY_ADD`](/en/opcodes#op_key_add)
+- [`OP_KEY_UPDATE`](/en/opcodes#op_key_update)
+- [`OP_KEY_DEL`](/en/opcodes#op_key_del)
+- [`OP_KEY_REQUEST`](/en/opcodes#op_key_request)
+- [`OP_KEY_REQUEST_SEEN`](/en/opcodes#op_key_request_seen)
+- [`OP_KEY_SHARE`](/en/opcodes#op_key_share)
+- [`OP_WRITE_REQUEST`](/en/opcodes#op_write_request)
+- [`OP_WRITE_REQUEST_RESPONSE`](/en/opcodes#op_write_request_response)
 
-Using these primitives, one can build a system that gives multiple devices (read: multiple keys) control over a smart contract. This typically involves using [`OP_KEY_ADD`](opcodes#op_key_add) to add each device key to the contract. [`OP_KEY_SHARE`](opcodes#op_key_share) can then be used to share a shared secret. More complicated schemes can be devised as well.
+Using these primitives, one can build a system that gives multiple devices (read: multiple keys) control over a smart contract. This typically involves using [`OP_KEY_ADD`](/en/opcodes#op_key_add) to add each device key to the contract. [`OP_KEY_SHARE`](/en/opcodes#op_key_share) can then be used to share a shared secret. More complicated schemes can be devised as well.

@@ -4,25 +4,25 @@ description: "How messages are processed to build up a shared state in Shelter P
 ---
 import spmessageRef from './images/SPMessage.svg'
 
-Message processing begins either when clients receive an [`SPMessage`](spmessage) over [the WebSocket](server-api#server-entry), or by calling one of the RESTful APIs like [`/eventsAfter`](server-api#eventsafter) and processing the list of events the server sends back.
+Message processing begins either when clients receive an [`SPMessage`](/en/spmessage) over [the WebSocket](/en/server-api#server-entry), or by calling one of the RESTful APIs like [`/eventsAfter`](/en/server-api#eventsafter) and processing the list of events the server sends back.
 
 The events in a contract chain are processed in the order they appear in the contract, to build up a consistent shared state across clients (although in some cases, [it is possible for clients to arrive at slightly different state](#inconsistent-state)).
 
-A contract chain is instantiated using [`OP_CONTRACT`](opcodes#op_contract). From that point on, [other opcodes](opcodes) are added in an append-only manner, and processed in turn.
+A contract chain is instantiated using [`OP_CONTRACT`](/en/opcodes#op_contract). From that point on, [other opcodes](/en/opcodes) are added in an append-only manner, and processed in turn.
 
 <img src={spmessageRef} alt="Simple diagram showing two SPMessages, the first OP_CONTRACT, the next, OP_ACTION_ENCRYPTED" class="center" />
 
-> 💡 The arrows in the picture above point right to indicate which message comes next in the contract chain, but in reality the connections are actually backwards, with each new message pointing to the previous message by referencing it using [`previousHEAD`](spmessage). The server keeps track of the latest message for any given contract by storing the latest message hash under a special key in the database. Chelonia uses `head=<contractID>`.
+> 💡 The arrows in the picture above point right to indicate which message comes next in the contract chain, but in reality the connections are actually backwards, with each new message pointing to the previous message by referencing it using [`previousHEAD`](/en/spmessage). The server keeps track of the latest message for any given contract by storing the latest message hash under a special key in the database. Chelonia uses `head=<contractID>`.
 
 ### Client-side Processing
 
 Message processing consists of the following steps on the client:
 
-1. Verifies it is expecting this message (because it's part of a contract that it [subscribed to](server-api#client-sub)).
+1. Verifies it is expecting this message (because it's part of a contract that it [subscribed to](/en/server-api#client-sub)).
 2. Verifies the message builds upon the previous one we've seen and optionally stores a copy of the message to its local key-value database (if a "full node").
     - If the message does not build upon the most recent message we've seen for this contract, it is discarded and an attempt to "reingest" it is made by syncing the contract on the assumption that there are messages between the last one we saw and this message.
 3. Temporarily saves a copy of the entire local contract state (in case the next step fails).
-4. Processes the message [opcode](opcodes), modifying local contract state as needed.
+4. Processes the message [opcode](/en/opcodes), modifying local contract state as needed.
     - If this step fails, it reverts all mutations using the state that was saved in (3), emits errors as needed, and skips executing side effects.
 5. Updates the most recent hash that we've seen for this contract (aka "contract HEAD") to equal the hash of this message.
 6. Executes any contract side effects.
@@ -44,7 +44,7 @@ There is one situation where inconsistent state is still possible, and that is c
 
 In order to facilitate certain features, Shelter Protocol attempts to decrypt messages using *all* private keys that are available to the client, including keys from other contracts. For example, it can be useful for clients to decrypt some information stored in an identity contract (like a display name or profile picture), but not be able to read all of the information stored on someone else's identity contract. However, this opens the door for inconsistent contract state across clients.
 
-When messages sent using [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) are encrypted using keys that **Client A** has that **Client B** does not have, inconsistent client state is the result. **Client A** will be able to decrypt and process all messages, but **Client B** might only be able to decrypt some of them, leading to partially inconsistent state.
+When messages sent using [`OP_ACTION_ENCRYPTED`](/en/opcodes#op_action_encrypted) are encrypted using keys that **Client A** has that **Client B** does not have, inconsistent client state is the result. **Client A** will be able to decrypt and process all messages, but **Client B** might only be able to decrypt some of them, leading to partially inconsistent state.
 
 It is up to developers to be aware of such possibilities and handle them accordingly.
 
@@ -53,9 +53,9 @@ It is up to developers to be aware of such possibilities and handle them accordi
 Special keys on contract state are prefixed with `_`. These are managed by Shelter Protocol implementations and must not set by developers. Currently, two special keys are defined:
 
 - `_vm` — is used to store various metadata critical to interpreting messages that also needs to be sync'd across clients. For example, `_vm.authorizedKeys` stores keys that are used to verify message signatures.
-- `_volatile` — This represents client-local information for contract related data like private keys. Implementations could store this information someplace else if they prefer. `_volatile` must not be shared publicly. For example, `_volatile.keys` is used to store private keys that decrypt messages. This attribute is not stored in [state snapshots](state-snapshots) and never leaves the client device.
+- `_volatile` — This represents client-local information for contract related data like private keys. Implementations could store this information someplace else if they prefer. `_volatile` must not be shared publicly. For example, `_volatile.keys` is used to store private keys that decrypt messages. This attribute is not stored in [state snapshots](/en/state-snapshots) and never leaves the client device.
 
-See the [opcodes](opcodes) documentation for more details of what is stored on `_vm` and `_volatile`.
+See the [opcodes](/en/opcodes) documentation for more details of what is stored on `_vm` and `_volatile`.
 
 TODO/TBD: specify how secret keys are handled in snapshots.
 
@@ -67,6 +67,6 @@ All message contracts and loaded in a sandbox by the client. This makes it safe 
 
 ### Server-side Processing
 
-Because the server is only interested in ensuring that authorized parties are allowed to write to contracts, the server processes all opcodes except for [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) and [`OP_ACTION_UNENCRYPTED`](opcodes#op_action_unencrypted).
+Because the server is only interested in ensuring that authorized parties are allowed to write to contracts, the server processes all opcodes except for [`OP_ACTION_ENCRYPTED`](/en/opcodes#op_action_encrypted) and [`OP_ACTION_UNENCRYPTED`](/en/opcodes#op_action_unencrypted).
 
 🚧 This section is under construction. 🚧

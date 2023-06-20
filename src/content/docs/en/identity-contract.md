@@ -52,9 +52,9 @@ sbp('chelonia/defineContract', {
 })
 ```
 
-Actions are invoked on the contract by creating an [`SPMessage`](spmessage) with either [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) or [`OP_ACTION_UNENCRYPTED`](opcodes#op_action_unencrypted) and passing that message to the server's [`POST /event`](server-api#event) API. The server then broadcasts that update to any clients that are interested in this contract.
+Actions are invoked on the contract by creating an [`SPMessage`](/en/spmessage) with either [`OP_ACTION_ENCRYPTED`](/en/opcodes#op_action_encrypted) or [`OP_ACTION_UNENCRYPTED`](/en/opcodes#op_action_unencrypted) and passing that message to the server's [`POST /event`](/en/server-api#event) API. The server then broadcasts that update to any clients that are interested in this contract.
 
-The constructor is the first action invoked on a contract (and typically the second message sent to a contract, after [`OP_CONTRACT`](opcodes#op_contract)).
+The constructor is the first action invoked on a contract (and typically the second message sent to a contract, after [`OP_CONTRACT`](/en/opcodes#op_contract)).
 
 For each action, Chelonia allows contracts to define validation functions and processing functions. The job of a validation function (`validate` in the code above) is to ensure the data is properly formatted so that it is safe to process. A validation function is called twice: once when the message is created (before sending it to the server), and again when clients recieve the message back from the server.
 
@@ -91,7 +91,7 @@ We can create additional actions to update the contract's `state.attributes`:
     },
 ```
 
-Great! Now by invoking [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) we can update our email address.
+Great! Now by invoking [`OP_ACTION_ENCRYPTED`](/en/opcodes#op_action_encrypted) we can update our email address.
 
 In Chelonia, it looks like this:
 
@@ -107,7 +107,7 @@ await sbp('chelonia/out/actionEncrypted', {
 })
 ```
 
-The selector `'chelonia/out/actionEncrypted'` will create our [`SPMessage`](spmessage) for [`OP_ACTION_ENCRYPTED`](opcodes#op_action_encrypted) and [send it](server-api#event) to the server, which will then send the message back to us so that the `process` function for our local copy of the contract gets invoked with the new email address.
+The selector `'chelonia/out/actionEncrypted'` will create our [`SPMessage`](/en/spmessage) for [`OP_ACTION_ENCRYPTED`](/en/opcodes#op_action_encrypted) and [send it](/en/server-api#event) to the server, which will then send the message back to us so that the `process` function for our local copy of the contract gets invoked with the new email address.
 
 The signing and encryption keys are defined when we [create an instance of our contract](#creating-a-user).
 
@@ -164,11 +164,11 @@ Note: Chelonia has more features (getters, metadata, methods, etc.), but those a
 
 ### Creating a user
 
-Identity management in an end-to-end encrypted world involves [managing secret keys](multi-device).
+Identity management in an end-to-end encrypted world involves [managing secret keys](/en/multi-device).
 
-For our example, we will use the user's password, along with a [salt](zkpp), to generate two keypairs: an "Identity Proving Key" (IPK) and an "Identity Encryption Key" (IEK). These keys will be the "master keys" that we can use to prove our identity. We will also generate keys that can be used for day-to-day activities that do not require the user to enter their password each time they are used. We'll call these the "Contract Signing Key" (CSK) and the "Contract Encryption Key" (CEK), and we'll save them in encrypted them using the IEK.
+For our example, we will use the user's password, along with a [salt](/en/zkpp), to generate two keypairs: an "Identity Proving Key" (IPK) and an "Identity Encryption Key" (IEK). These keys will be the "master keys" that we can use to prove our identity. We will also generate keys that can be used for day-to-day activities that do not require the user to enter their password each time they are used. We'll call these the "Contract Signing Key" (CSK) and the "Contract Encryption Key" (CEK), and we'll save them in encrypted them using the IEK.
 
-Once we've generated the keys, and our contract code deployed to the server, we can create an instance of our contract using [`OP_CONTRACT`](opcodes#op_contract):
+Once we've generated the keys, and our contract code deployed to the server, we can create an instance of our contract using [`OP_CONTRACT`](/en/opcodes#op_contract):
 
 ```js
 const user = await sbp('chelonia/out/registerContract', {
@@ -234,7 +234,7 @@ const userID = user.contractID()
 await sbp('chelonia/contract/sync', userID)
 ```
 
-One final step is [registering our username](server-api#name) so that it points to our identity contract:
+One final step is [registering our username](/en/server-api#name) so that it points to our identity contract:
 
 ```js
 fetch(`${API_URL}/name`, {
