@@ -1,6 +1,6 @@
 export const SITE = {
 	title: 'Shelter Protocol',
-	description: 'Your website description.',
+	description: 'A protocol for creating end-to-end encrypted, federated, user-friendly web applications.',
 	defaultLanguage: 'en-US',
 } as const
 
@@ -8,7 +8,8 @@ export const SITE = {
 // TODO: update all of these URLs
 export const OPEN_GRAPH = {
 	image: {
-		src: 'https://github.com/withastro/astro/blob/main/.github/assets/banner.png?raw=true',
+		// src: 'https://github.com/withastro/astro/blob/main/.github/assets/banner.png?raw=true',
+		src: '',
 		alt: ''
 	},
 	twitter: 'astrodotbuild'
@@ -19,7 +20,7 @@ export const KNOWN_LANGUAGES = {
 } as const
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES)
 
-export const GITHUB_EDIT_URL = 'https://github.com/withastro/astro/tree/main/examples/docs'
+export const GITHUB_EDIT_URL = 'https://github.com/okturtles/shelterprotocol.net/tree/master'
 
 export const COMMUNITY_INVITE_URL = 'https://join.slack.com/t/okturtles/shared_invite/zt-10jmpfgxj-tXQ1MKW7t8qqdyY6fB7uyQ'
 
