@@ -1,0 +1,98 @@
+# Stork index configuration reference: https://stork-search.net/docs/config-ref
+
+[input]
+base_directory = "src/content/docs/en" # Relative to the root directory
+url_prefix = "/en"
+title_boost = "Ridiculous"
+
+[[input.files]]
+path = "authors.md"
+url = "/authors"
+title = "Authors"
+
+[[input.files]]
+path = "contract-manifests.md"
+url = "/contract-manifests"
+title = "Contract Manifests"
+
+[[input.files]]
+path = "federation.md"
+url = "/federation"
+title = "Federation"
+
+[[input.files]]
+path = "history.md"
+url = "/history"
+title = "History"
+
+[[input.files]]
+path = "identity-contract.md"
+url = "/identity-contract"
+title = "Identity Contract"
+
+[[input.files]]
+path = "implementations.md"
+url = "/implementations"
+title = "Implementations"
+
+[[input.files]]
+path = "introduction.md"
+url = "/introduction"
+title = "Introduction"
+
+[[input.files]]
+path = "invite-keys.md"
+url = "/invite-keys"
+title = "Invite Keys"
+
+[[input.files]]
+path = "key-concepts.mdx"
+url = "/key-concepts"
+title = "Key Concepts"
+filetype = "Markdown"
+
+[[input.files]]
+path = "message-processing.mdx"
+url = "/message-processing"
+title = "Message Processing"
+filetype = "Markdown"
+
+[[input.files]]
+path = "multi-device.md"
+url = "/multi-device"
+title = "Multiple Devices"
+
+[[input.files]]
+path = "opcodes.md"
+url = "/opcodes"
+title = "Opcodes"
+
+[[input.files]]
+path = "security.md"
+url = "/security"
+title = "Security"
+
+[[input.files]]
+path = "server-api.md"
+url = "/server-api"
+title = "Server API"
+
+[[input.files]]
+path = "spmessage.md"
+url = "/spmessage"
+title = "SPMessage"
+
+[[input.files]]
+path = "state-snapshots.md"
+url = "/state-snapshots"
+title = "State Snapshots"
+
+[[input.files]]
+path = "usecasess.md"
+url = "/usecases"
+title = "Real-world Apps"
+
+[[input.files]]
+path = "zkpp.md"
+url = "/zkpp"
+title = "ZKPP"

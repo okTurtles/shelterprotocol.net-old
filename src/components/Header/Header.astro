@@ -25,11 +25,13 @@ const lang = getLanguageFromURL(currentPage)
 		</div>
 		<div style="flex-grow: 1;"></div>
 		{KNOWN_LANGUAGE_CODES.length > 1 && <LanguageSelect lang={lang} client:idle />}
-		<!-- <div class="search-item">
+		<div class="search-item">
 			<Search client:idle />
-		</div> -->
+		</div>
 	</nav>
 </header>
+
+<script is:inline src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
 
 <style>
 	header {

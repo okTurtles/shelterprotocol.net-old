@@ -7,10 +7,10 @@
     "start": "astro dev --port 4000",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "search-index:en": "stork build --input src/stork-config/en.toml --output public/search-index/index_en.st"
   },
   "dependencies": {
-    "@algolia/client-search": "4.13.1",
     "@astrojs/mdx": "0.19.0",
     "@astrojs/preact": "2.1.0",
     "@astrojs/react": "2.1.1",
