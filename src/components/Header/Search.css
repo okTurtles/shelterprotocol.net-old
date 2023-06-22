@@ -1,8 +1,3 @@
-/** Style Algolia */
-:root {
-	--docsearch-primary-color: var(--theme-accent);
-	--docsearch-logo-color: var(--theme-text);
-}
 .search-input {
 	flex-grow: 1;
 	box-sizing: border-box;
@@ -63,13 +58,4 @@
 	.search-hint {
 		display: flex;
 	}
-}
-
-/* ------------------------------------------------------------ *\
-	DocSearch (Algolia)
-\* ------------------------------------------------------------ */
-
-.DocSearch-Modal .DocSearch-Hit a {
-	box-shadow: none;
-	border: 1px solid var(--theme-accent);
 }

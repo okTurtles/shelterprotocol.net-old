@@ -8,7 +8,6 @@ export default defineConfig({
 	integrations: [
 		// Enable Preact to support Preact JSX components.
 		preact(),
-		// Enable React for the Algolia search component.
 		react(),
 		mdx()
 	],
