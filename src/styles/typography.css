@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/SourceCodePro-Medium.otf');
+  src:
+    url('/fonts/SourceCodePro-Medium.otf') format("opentype"),
+    url("/fonts/Icons/SourceCodePro-Medium.woff2") format("woff2");
+}
