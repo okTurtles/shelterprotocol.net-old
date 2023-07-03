@@ -11,7 +11,7 @@ E2E protocols often generate unique private keys for each device a user logs in 
 
 While this unique-key-per-device approach works, and [can be used with Shelter Protocol (see below)](#unique-keys-per-device), it has a few significant drawbacks:
 
-1. How do users login on a new device? This approach often require extra steps the user must take to approve a login from a new device (for example, scanning a QR code).
+1. How do users log in on a new device? This approach often requires extra steps the user must take to approve a login from a new device (for example, scanning a QR code).
 2. What happens if a user loses all of their devices? Do they lose access to their account even if they know their username and password?
 3. Both the protocol and sometimes the UI must be complicated a bit to accommodate device management.
 
@@ -30,7 +30,7 @@ Shelter Protocol says, "Hey, passwords aren't going anywhere. They're cool. They
 
 We can derive the secret key directly from the password. This allows users to log in on any device without needing QR codes. To help protect against brute force attacks, we can use a random [*password salt*](https://en.wikipedia.org/wiki/Salt_(cryptography)). One question remains: how do we retrieve the salt from the server on a brand new device without revealing our password to the server?
 
-For this, Shelter Protocol introduces a [zero-knowledge sub-protocol for storing and retrieving passwords salts](/en/zkpp). This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to login from any device using just their username and password. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
+For this, Shelter Protocol introduces a [zero-knowledge sub-protocol for storing and retrieving passwords salts](/en/zkpp). This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to log in from any device using just their username and password. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
 
 The downside of this approach is that while we protect the secret key from being easilly brute forced by outsiders, the server itself can still attempt to brute force the password.
 

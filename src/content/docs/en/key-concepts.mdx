@@ -37,7 +37,7 @@ Contracts are referenced by their `contractID`, which is equal to the hash of th
 
 ### Key-value Store
 
-Contract chains and their events are stored in a key-value store. The protocol does not specify what key-value store needs to be used, it can be any key-value store.
+Contract chains and their events are stored in a key-value store. The protocol does not specify what key-value store needs to be used. It can be any key-value store.
 
 Every event is stored using the hash of its data as the key. This is called "content addressing", and can be found in other protocols like [IPFS](https://en.wikipedia.org/wiki/InterPlanetary_File_System). Content addressing and message signing allows the Shelter Protocol to forever maintain the integrity of all events.
 
@@ -85,7 +85,7 @@ Shelter Protocol defines a lightweight [decentralized/federated](/en/federation)
 
 Since every action in SP is signed using a user's private key, which in turn [is derived from their password](/en/multi-device), it's very important to use password salts along with the user's password to protect against brute force password cracking attacks.
 
-The Shelter Protocol has within it a zero-knowledge sub-protocol for storing and retrieving passwords salts. This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to login from any device using just their username and password, without needing to scan any QR codes. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
+The Shelter Protocol has within it a zero-knowledge sub-protocol for storing and retrieving passwords salts. This makes it possible for users to keep their traditional username/password flow while maintaining a very high level of security. Users are still able to log in from any device using just their username and password, without needing to scan any QR codes. The user is able to prove to the server in a zero-knowledge way that they know their password, and thereby retrieve the salt needed to compute their private key.
 
 📚 [**Multiple Devices**](/en/multi-device) \
 📚 [**Reference: ZKPP**](/en/zkpp)
