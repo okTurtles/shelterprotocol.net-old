@@ -217,7 +217,8 @@ Allows contracts to request private keys from other contracts (shared via [`OP_K
 
 A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used to create a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](/en/invite-keys).
 
-TODO: add note that it adds keys with KEY_REQUEST_SEEN perms
+<!-- TODO: add note that it adds keys with KEY_REQUEST_SEEN perms -->
+🚧 This section is under construction. 🚧
 
 - Opcode: `"kr"`
 
@@ -362,6 +363,8 @@ Requests permission to write to a contract. The only opcode that is allowed to b
   - If the receiving contract does not approve of the `permissions` or `ringLevel` being requested, it must reject this request.
   - Clients and servers should enforce strict limits for the length of values for the fields of the key's `meta` data.
 - `keyShare` - optionally offers to share a private key via [`OP_KEY_SHARE`](#op_key_share), if approved. Clients and servers should enforce strict limits on the length of values for the fields of the key's `meta` data.
+
+<!-- TODO: address rate limiting -->
 
 **Affected state:**
 

@@ -18,13 +18,13 @@ A contract chain is instantiated using [`OP_CONTRACT`](/en/opcodes#op_contract).
 
 Message processing consists of the following steps on the client:
 
-1. Verifies it is expecting this message (because it's part of a contract that it [subscribed to](/en/server-api#client-sub)).
-2. Verifies the message builds upon the previous one we've seen and optionally stores a copy of the message to its local key-value database (if a "full node").
-    - If the message does not build upon the most recent message we've seen for this contract, it is discarded and an attempt to "reingest" it is made by syncing the contract on the assumption that there are messages between the last one we saw and this message.
+1. Verifies it is expecting this message (because the message is part of a contract that it [subscribed to](/en/server-api#client-sub)).
+2. Verifies the message builds upon the previous one it's seen and optionally stores a copy of the message to its local key-value database (if a "full node").
+    - If the message does not build upon the most recent message seen for this contract, then it is discarded, and an attempt to "reingest" the message is made by syncing the contract on the assumption that there are messages between the last one seen and this message.
 3. Temporarily saves a copy of the entire local contract state (in case the next step fails).
 4. Processes the message [opcode](/en/opcodes), modifying local contract state as needed.
     - If this step fails, it reverts all mutations using the state that was saved in (3), emits errors as needed, and skips executing side effects.
-5. Updates the most recent hash that we've seen for this contract (aka "contract HEAD") to equal the hash of this message.
+5. Updates the most recent hash seen for this contract (aka "contract HEAD") to equal the hash of this message.
 6. Executes any contract side effects.
     - If there are any errors during side effect execution, inform the user's code and proceed with processing further messages.
 
@@ -57,11 +57,12 @@ Special keys on contract state are prefixed with `_`. These are managed by Shelt
 
 See the [opcodes](/en/opcodes) documentation for more details of what is stored on `_vm` and `_volatile`.
 
-TODO/TBD: specify how secret keys are handled in snapshots.
+<!-- TODO/TBD: specify how secret keys are handled in snapshots. -->
+🚧 This section is under construction. 🚧
 
 ### Sandbox
 
-All message contracts and loaded in a sandbox by the client. This makes it safe for clients to view the state of arbitrary contracts.
+All message contracts are loaded in a sandbox by the client. This makes it safe for clients to view the state of arbitrary contracts.
 
 🚧 This section is under construction. 🚧
 
