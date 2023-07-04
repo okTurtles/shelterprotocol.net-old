@@ -215,10 +215,9 @@ Note that if a key is deleted, any contracts listening for updates to this key v
 
 Allows contracts to request private keys from other contracts (shared via [`OP_KEY_SHARE`](#op_key_share)).
 
-A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used to create a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](/en/invite-keys).
+A real-world usecase for this opcode is in the handling of invites to join a group. To see how `OP_KEY_REQUEST` can be used in conjunction with a limited quantity of invites (or invites that expire), see [Reference: Invite Keys](/en/invite-keys).
 
-<!-- TODO: add note that it adds keys with KEY_REQUEST_SEEN perms -->
-🚧 This section is under construction. 🚧
+> ⚠︎ Implementations should make sure that when an `OP_KEY_REQUEST` is issued from `contract A` to `contract B`, that `contract B` has the correct permissions to be able to send a response back with [`OP_KEY_SHARE`](#op_key_share). For example, implementations can ensure this by first issuing an [`OP_KEY_ADD`](#op_key_add) to `contract A` with [`OP_KEY_SHARE`](#op_key_share) permissions, for all of the keys in `contract B` that have [`KEY_REQUEST_SEEN`](#op_key_request_seen) permissions (as foreign keys).
 
 - Opcode: `"kr"`
 

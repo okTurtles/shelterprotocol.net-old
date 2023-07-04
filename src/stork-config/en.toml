@@ -88,7 +88,7 @@ url = "/state-snapshots"
 title = "State Snapshots"
 
 [[input.files]]
-path = "usecasess.md"
+path = "usecases.md"
 url = "/usecases"
 title = "Real-world Apps"
 
