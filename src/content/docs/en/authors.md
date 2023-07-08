@@ -12,4 +12,4 @@ Its authors are:
 
 ## Sponsorship
 
-[Contact us](mailto:hi@okturtles.org) about sponsorship opportunities. Have your logo prominently featured and receive support and training for Shelter Protocol integration. You can also directly sponsor us via [Github Sponsors](https://github.com/sponsors/okTurtles) or the [okTurtles donation page](https://okturtles.org/donate/).
+[Contact us](mailto:hi@okturtles.org) about sponsorship opportunities. Have your logo prominently featured and receive support and training for Shelter Protocol integration. You can also directly sponsor this work via [Github Sponsors](https://github.com/sponsors/okTurtles) or the [okTurtles donation page](https://okturtles.org/donate/).
