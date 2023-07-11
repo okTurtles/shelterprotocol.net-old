@@ -12,7 +12,7 @@ A contract chain is instantiated using [`OP_CONTRACT`](/en/opcodes#op_contract).
 
 <img src={spmessageRef} alt="Simple diagram showing two SPMessages, the first OP_CONTRACT, the next, OP_ACTION_ENCRYPTED" class="center" />
 
-> 💡 The arrows in the picture above point right to indicate which message comes next in the contract chain, but in reality the connections are actually backwards, with each new message pointing to the previous message by referencing it using [`previousHEAD`](/en/spmessage). The server keeps track of the latest message for any given contract by storing the latest message hash under a special key in the database. Chelonia uses `head=<contractID>`.
+> 💡 The arrows in the picture above point right to indicate which message comes next in the contract chain, but in reality the connections are actually backwards, with each new message pointing to the previous message by referencing it using [`previousHEAD`](/en/spmessage). The server keeps track of the latest message for any given contract by storing the latest message hash under a special key in the database. [Chelonia](/en/implementations) uses `head=<contractID>`.
 
 ### Client-side Processing
 
@@ -20,9 +20,9 @@ Message processing consists of the following steps on the client:
 
 1. Verifies it is expecting this message (because the message is part of a contract that it [subscribed to](/en/server-api#client-sub)).
 2. Verifies the message builds upon the previous one it's seen and optionally stores a copy of the message to its local key-value database (if a "full node").
-    - If the message does not build upon the most recent message seen for this contract, then it is discarded, and an attempt to "reingest" the message is made by syncing the contract on the assumption that there are messages between the last one seen and this message.
+    - If the message does not build upon the most recent message seen for this contract, then it is discarded, and an attempt to "reingest" the message is made by [syncing the contract](/en/server-api#eventsafter) on the assumption that there are messages between the last one seen and this message.
 3. Temporarily saves a copy of the entire local contract state (in case the next step fails).
-4. Processes the message [opcode](/en/opcodes), modifying local contract state as needed.
+4. Processes the message and its [opcode](/en/opcodes) to modify contract state. Loads any contract in a [sandbox](#sandbox) as needed via its [manifest hash](/en/contract-manifests), and passes the message data to any corresponding contract actions so that they can update the contract state.
     - If this step fails, it reverts all mutations using the state that was saved in (3), emits errors as needed, and skips executing side effects.
 5. Updates the most recent hash seen for this contract (aka "contract HEAD") to equal the hash of this message.
 6. Executes any contract side effects.

@@ -3,9 +3,9 @@ title: "Key Concepts"
 ---
 import spmessageRef from './images/SPMessage.svg'
 
-The Shelter Protocol (SP) defines a method to create a lightweight, high-level virtual machine out of contract chains. Contract chains are what define [smart contracts](https://en.wikipedia.org/wiki/Smart_contract) along with their activity in SP.
+The Shelter Protocol (SP) defines a method to create a lightweight, high-level, federated virtual machine out of contract chains. Contract chains are what define [smart contracts](https://en.wikipedia.org/wiki/Smart_contract) along with their activity in SP.
 
-We can use these contract chains to create and define concepts in our programs in a similar way to how Classes and Objects are used in [Object-oriented Programming](https://en.wikipedia.org/wiki/Object-oriented_programming), except these Classes and Objects can be shared across many devices while keeping their data end-to-end encrypted.
+We can use these contract chains to create and define concepts in our programs in a similar way to how Classes and Objects are used in [Object-oriented Programming](https://en.wikipedia.org/wiki/Object-oriented_programming), except these Classes and Objects can be shared across many devices while keeping their state end-to-end encrypted.
 
 ### SPMessage
 
@@ -19,21 +19,23 @@ All subsequent messages are used to update the state of that contract chain. The
 
 Together, these messages form an append-only chain of events that is used to build up a state for that contract chain.
 
-📚 [**Reference: `SPMessage`**](/en/spmessage)
+📚 [**Reference: `SPMessage`**](/en/spmessage)\
+📚 [**Message Processing**](/en/message-processing)
 
 ### Contract Chains
 
-"Contract Chains" are just a list of events. They are special in that they are immutable and append-only. 
+"Contract Chains" are just a list of events. They are special in that they are immutable and append-only. Each event in the chain references the code that will be used to process the event and update the contract state.
 
-The concept of a "list of events" is fundamental in computer science. At their lowest level, CPUs are designed for one thing: processing a list of events and updating a state based on that list of events. Shelter Protocol is no different, except that it shares this list of events across devices and adds primitives for end-to-end encryption.
+The concept of a "list of events" is fundamental in computer science. At their lowest level, CPUs are designed for one thing: processing a list of events and updating a state based on that list of events. Shelter Protocol is no different, except that it shares this list of events across devices and adds primitives for end-to-end encryption. We need a list of events so that we can reproduce the same state on [multiple devices](/en/multi-device).
 
-To this basic concept of "list of events" we can add fancy terms to sound smart: "smart contracts", "virtual machines", "git", "blockchains", "classes", etc. All of these ideas can be represented as a list of events.
+The first event defines and initializes the contract (or "class instance" in OOP terms). Each subsequent event invokes actions that [update the state](/en/message-processing) for that contract instance by processing the event through a small program called a [smart contract](https://en.wikipedia.org/wiki/Smart_contract) (aka a "contract").
 
-The first event defines and initializes the contract (or "class instance" in OOP terms). Each subsequent event invokes actions that [update the state](/en/message-processing) for that contract instance. Because developers make mistakes, contracts are upgradeable, and every event [references the specific version](#contract-manifests) of the contract that should be used to interpret that event. This guarantees that the final state that results from processing all of the events will be the same no matter when the events are processed.
+Because developers make mistakes, contracts are upgradeable, and every event [references the specific version](#contract-manifests) of the contract that should be used to interpret that event. This guarantees that the final state that results from processing all of the events will be the same no matter when the events are processed.
 
 Contracts are referenced by their `contractID`, which is equal to the hash of the first message in the contract chain.
 
-📚 [**Message Processing**](/en/message-processing)
+📚 [**Message Processing**](/en/message-processing)\
+📚 [**Multiple Devices**](/en/multi-device)
 
 ### Key-value Store
 
@@ -60,7 +62,8 @@ When contracts are loaded by the client, they are loaded first by specifying the
 
 Every `SPMessage` references the specific manifest used to interpret it. This allows contract chains to be upgraded over time while ensuring a deterministic state. Old messages in the chain will always be interpreted using the correct version of the contract.
 
-📚 [**Reference: Contract Manifest**](/en/contract-manifests)
+📚 [**Reference: Contract Manifest**](/en/contract-manifests)\
+📚 [**Message Processing**](/en/message-processing)
 
 ### Opcodes
 
