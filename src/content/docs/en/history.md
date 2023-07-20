@@ -3,6 +3,10 @@ title: "History"
 description: "Shelter Protocol History"
 ---
 
+### 1.0.0d
+
+- Linked to Shelter Protocol talk on introduction page.
+
 ### 1.0.0c
 
 - Various documentation updates, including clarifications related to when contract code is loaded.

@@ -7,6 +7,8 @@ description: "Introduction to the Shelter Protocol"
 
 The Shelter Protocol is a protocol for creating end-to-end encrypted, federated, user-friendly web applications.
 
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/w0GQz-UF0Lk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ### Why?
 
 Traditional web applications are inherently vulnerable to various types of data breaches and privacy violations.
