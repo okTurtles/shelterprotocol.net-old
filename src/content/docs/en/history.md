@@ -3,6 +3,10 @@ title: "History"
 description: "Shelter Protocol History"
 ---
 
+### 1.0.0e
+
+- Update `OP_ATOMIC` documentation.
+
 ### 1.0.0d
 
 - Linked to Shelter Protocol talk on introduction page.

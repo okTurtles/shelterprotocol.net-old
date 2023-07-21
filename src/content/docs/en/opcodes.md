@@ -396,14 +396,12 @@ The contract that sent `OP_WRITE_REQUEST` should be monitoring this contract for
 
 Combines several opcodes into one and applies them sequentially. If any operation fails, the entire operation fails and the state is reverted.
 
-- Opcode: `"oa"`
+- Opcode: `"a"`
 
 ```json
 [
-  {
-    "op": "<opcode>",
-    "data": <op-value>
-  },
+  ["<opcode-1>", <op-value-1>],
+  ["<opcode-2>", <op-value-2>]
   // ...
 ]
 ```
