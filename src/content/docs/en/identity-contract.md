@@ -166,7 +166,7 @@ Note: Chelonia has more features (getters, metadata, methods, etc.), but those a
 
 Identity management in an end-to-end encrypted world involves [managing secret keys](/en/multi-device).
 
-For our example, we will use the user's password, along with a [salt](/en/zkpp), to generate two keypairs: an "Identity Proving Key" (IPK) and an "Identity Encryption Key" (IEK). These keys will be the "master keys" that we can use to prove our identity. We will also generate keys that can be used for day-to-day activities that do not require the user to enter their password each time they are used. We'll call these the "Contract Signing Key" (CSK) and the "Contract Encryption Key" (CEK), and we'll save them in encrypted them using the IEK.
+For our example, we will use the user's password, along with a [salt](/en/zkpp), to generate two keypairs: an "Identity Proving Key" (IPK) and an "Identity Encryption Key" (IEK). These keys will be the "master keys" that we can use to prove our identity. We will also generate keys that can be used for day-to-day activities that do not require the user to enter their password each time they are used. We'll call these the "Contract Signing Key" (CSK) and the "Contract Encryption Key" (CEK), and we'll save them in encrypted form using the IEK.
 
 Once we've generated the keys, and our contract code deployed to the server, we can create an instance of our contract using [`OP_CONTRACT`](/en/opcodes#op_contract):
 
