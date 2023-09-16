@@ -3,6 +3,10 @@ title: "History"
 description: "Shelter Protocol History"
 ---
 
+### 1.0.0f
+
+- Updated `OP_ACTION_ENCRYPTED` definition.
+
 ### 1.0.0e
 
 - Update `OP_ATOMIC` documentation.

@@ -57,12 +57,8 @@ Converts the message data of [`OP_ACTION_UNENCRYPTED`](#op_action_unencrypted) i
 
 - Opcode: `"ae"`
 
-
 ```json
-{
-  "keyId": "<keyId>",
-  "content": "<encryptedJSON>"
-}
+["<keyId>", encrypt("<key>", JSON.stringify(<data>))]
 ```
 
 **Affected state:**
