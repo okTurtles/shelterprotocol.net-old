@@ -6,13 +6,17 @@ import PageContent from '../components/PageContent/PageContent.astro'
 import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro'
 import RightSidebar from '../components/RightSidebar/RightSidebar.astro'
 import Footer from '../components/Footer/Footer.astro'
+import PageBottomAnimation from '../components/PageBottomAnimation/index.jsx'
 import { GITHUB_EDIT_URL, SITE } from '../consts.ts'
 
-const { headings, ...data } = Astro.props
+const { headings, pagePath = '', ...data } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const currentPage = Astro.url.pathname
 const currentFile = `src/content/docs${currentPage.replace(/\/$/, '')}.md`
 const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
+const includesPageBottomAnimation = [
+	'/authors'  // keeping it as a list in case we decide to add the animation to other pages as well.
+].some(pathSection => pagePath.endsWith(pathSection))
 ---
 
 <html dir={data.dir} lang={data.lang} class="initial">
@@ -22,13 +26,19 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
 		<title>
 			{`${data.title} 🐢 ${SITE.title}`}
 		</title>
-		<style>
+		<style lang="scss">
 			body {
 				width: 100%;
 				display: grid;
 				grid-template-rows: var(--theme-navbar-height) 1fr;
+
 				--gutter: 0.5rem;
 				--doc-padding: 2rem;
+
+				&.has-bottom-animation {
+					grid-template-rows: var(--theme-navbar-height) 1fr auto;
+					overflow-x: hidden;
+				}
 			}
 
 			.layout {
@@ -39,6 +49,19 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
 						1fr
 					);
 				overflow-x: hidden;
+
+				@media (min-width: 50em) {
+					overflow: initial;
+					grid-template-columns: 20rem minmax(0, var(--max-width));
+					gap: 1em;
+				}
+
+				@media (min-width: 72em) {
+					grid-template-columns: 20rem minmax(0, var(--max-width)) 18rem;
+					padding-left: 0;
+					padding-right: 0;
+					margin: 0 auto;
+				}
 			}
 
 			.grid-sidebar {
@@ -53,6 +76,13 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
 				background-color: var(--theme-bg);
 				z-index: 10;
 				display: none;
+
+				@media (min-width: 50em) {
+					display: flex;
+					padding-left: 2rem;
+					position: sticky;
+					grid-column: 1;
+				}
 			}
 
 			#grid-main {
@@ -65,32 +95,8 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
 
 			#grid-right {
 				display: none;
-			}
 
-			@media (min-width: 50em) {
-				.layout {
-					overflow: initial;
-					grid-template-columns: 20rem minmax(0, var(--max-width));
-					gap: 1em;
-				}
-
-				#grid-left {
-					display: flex;
-					padding-left: 2rem;
-					position: sticky;
-					grid-column: 1;
-				}
-			}
-
-			@media (min-width: 72em) {
-				.layout {
-					grid-template-columns: 20rem minmax(0, var(--max-width)) 18rem;
-					padding-left: 0;
-					padding-right: 0;
-					margin: 0 auto;
-				}
-
-				#grid-right {
+				@media (min-width: 72em) {
 					grid-column: 3;
 					display: flex;
 				}
@@ -120,7 +126,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
 		</style>
 	</head>
 
-	<body>
+	<body class={includesPageBottomAnimation ? 'has-bottom-animation' : ''}>
 		<Header currentPage={currentPage} />
 		<main class="layout">
 			<aside id="grid-left" class="grid-sidebar" title="Site Navigation">
@@ -136,5 +142,6 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`
 			</aside>
 		</main>
 		<Footer path={currentFile} />
+		{includesPageBottomAnimation && <PageBottomAnimation client:load />}
 	</body>
 </html>

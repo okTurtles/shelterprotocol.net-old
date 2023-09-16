@@ -1,0 +1,19 @@
+.page-bottom-animation-container {
+  position: relative;
+  box-sizing: border-box;
+  background-color: var(--theme-bg);
+  margin-bottom: 2px;
+  height: 0;
+  width: 100%;
+  overflow: hidden;
+
+  &.is-active {
+    overflow: initial;
+
+    #turtle-canvas {
+      position: sticky;
+      top: 0;
+      left: 0;
+    }
+  }
+}
