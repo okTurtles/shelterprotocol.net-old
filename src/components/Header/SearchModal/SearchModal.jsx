@@ -1,5 +1,6 @@
 /** @jsxImportSource react */
 import { useState, useEffect, useRef } from 'react'
+import { classNames } from '../../../utils.ts'
 import { STORK } from '../../../consts.ts'
 import './SearchModal.css'
 
@@ -54,11 +55,13 @@ export default function SearchModal ({
     initStork()
   }, [])
 
-  const formElClass = [
+  const formElClass = classNames(
     'search-modal__input-container',
-    isInputFocused && 'is-focused',
-    !isIndexReady && 'is-disabled'
-  ].filter(Boolean).join(' ')
+    {
+      'is-focused': isInputFocused,
+      'is-disabled': !isIndexReady
+    }
+  )
 
   return (
     <div className={`search-modal ${classes}`}
