@@ -1,9 +1,9 @@
-/** @jsxImportSource react */
-import { useState, useCallback, useRef } from 'react';
+/** @jsxImportSource preact */
+import { useState, useCallback } from 'preact/hooks';
 import '../../styles/stork-default.css';
 import './Search.css';
 
-import { createPortal } from 'react-dom';
+import { createPortal } from 'preact/compat';
 import SearchModal from './SearchModal/SearchModal.jsx';
 
 export default function Search() {

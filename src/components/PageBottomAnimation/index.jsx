@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+/** @jsxImportSource preact */
+
+import { useEffect, useRef } from 'preact/hooks'
 import { initTurtleAnimation } from './turtle-animation'
 import './PageBottomAnimation.scss'
 

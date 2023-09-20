@@ -1,7 +1,5 @@
 # TODO
-
-1. Add non-Algolia search and remove `@astrojs/react`
-2. Replace all Preact stuff with Vue
+1. Replace all Preact stuff with Vue
 
 
 ### Import desired features from other templates
