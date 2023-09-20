@@ -11,12 +11,12 @@
     "search-index:en": "stork build --input src/stork-config/en.toml --output public/search-index/index_en.st"
   },
   "dependencies": {
-    "@astrojs/mdx": "0.19.0",
-    "@astrojs/preact": "2.1.0",
-    "@docsearch/css": "3.1.0",
-    "@types/node": "18.0.0",
-    "astro": "2.3.0",
-    "preact": "10.7.3"
+    "@astrojs/mdx": "1.1.0",
+    "@astrojs/preact": "3.0.0",
+    "@docsearch/css": "3.5.2",
+    "@types/node": "20.6.1",
+    "astro": "3.1.0",
+    "preact": "10.17.1"
   },
   "devDependencies": {
     "html-escaper": "3.0.3",

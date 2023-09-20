@@ -9,5 +9,12 @@ export default defineConfig({
 		preact(),
 		mdx()
 	],
+	vite: {
+		esbuild: {
+			// below is an option added to silence the vite warning that is related to "/** @jsxImportSource preact */" in various .jsx files.
+			// (reference for a similar case: https://github.com/vitejs/vite-plugin-react/issues/12)
+			jsx: 'automatic'
+		}
+	},
 	site: 'https://shelterprotocol.net'
 })
