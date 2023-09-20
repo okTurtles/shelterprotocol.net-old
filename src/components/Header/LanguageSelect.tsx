@@ -1,5 +1,5 @@
-/** @jsxImportSource react */
-import type { FunctionComponent } from 'react';
+/** @jsxImportSource preact */
+import type { FunctionComponent } from 'preact';
 import './LanguageSelect.css';
 import { KNOWN_LANGUAGES, langPathRegex } from '../../languages';
 

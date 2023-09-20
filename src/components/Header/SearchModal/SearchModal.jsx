@@ -1,5 +1,5 @@
-/** @jsxImportSource react */
-import { useState, useEffect, useRef } from 'react'
+/** @jsxImportSource preact */
+import { useState, useEffect, useRef } from 'preact/hooks'
 import { classNames } from '../../../utils.ts'
 import { STORK } from '../../../consts.ts'
 import './SearchModal.css'
