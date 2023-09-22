@@ -1,12 +1,13 @@
 /** @jsxImportSource preact */
 import { useState, useEffect, useRef } from 'preact/hooks'
+import { memo } from 'preact/compat';
 import { classNames } from '../../../utils.ts'
 import { STORK } from '../../../consts.ts'
 import './SearchModal.css'
 
 const { registrationName } = STORK
 /* This is a search-box modal component hooked up with stork-search(https://stork-search.net/docs) library */
-export default function SearchModal ({
+function SearchModal ({
   closeModal,
   onInput = null,
   classes = ''
@@ -20,12 +21,14 @@ export default function SearchModal ({
   const handleFormSubmit = (e) => {
     e.preventDefault()
   }
+
   const handleInput = (e) => {
     const { value = '' } = e.target
 
     onInput && onInput(e)
     setSearchStr(value)
   }
+
   const handleBgClick = (e) => {
     const element = document.elementFromPoint(e.clientX, e.clientY).closest('.search-modal__interface')
 
@@ -33,6 +36,7 @@ export default function SearchModal ({
       closeModal()
     }
   }
+
   const initStork = async () => {
     try {
       const result = await stork.register(
@@ -107,3 +111,6 @@ export default function SearchModal ({
     </div>
   )
 }
+
+// reference: https://preactjs.com/guide/v10/switching-to-preact/#memo
+export default memo(SearchModal)

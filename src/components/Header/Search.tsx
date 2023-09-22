@@ -9,13 +9,13 @@ import SearchModal from './SearchModal/SearchModal.jsx';
 export default function Search() {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const openSearch = useCallback(() => {
+	const openSearch = () => {
 		setIsOpen(true);
-	}, [setIsOpen]);
+	};
 
 	const closeSearch = useCallback(() => {
 		setIsOpen(false);
-	}, [setIsOpen]);
+	}, []);
 
 	return (
 		<>
