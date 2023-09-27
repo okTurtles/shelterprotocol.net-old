@@ -10,7 +10,7 @@ The events in a contract chain are processed in the order they appear in the con
 
 A contract chain is instantiated using [`OP_CONTRACT`](/en/opcodes#op_contract). From that point on, [other opcodes](/en/opcodes) are added in an append-only manner, and processed in turn.
 
-<img src={spmessageRef} alt="Simple diagram showing two SPMessages, the first OP_CONTRACT, the next, OP_ACTION_ENCRYPTED" class="center" />
+<img src={spmessageRef.src} alt="Simple diagram showing two SPMessages, the first OP_CONTRACT, the next, OP_ACTION_ENCRYPTED" class="center" />
 
 > 💡 The arrows in the picture above point right to indicate which message comes next in the contract chain, but in reality the connections are actually backwards, with each new message pointing to the previous message by referencing it using [`previousHEAD`](/en/spmessage). The server keeps track of the latest message for any given contract by storing the latest message hash under a special key in the database. [Chelonia](/en/implementations) uses `head=<contractID>`.
 
