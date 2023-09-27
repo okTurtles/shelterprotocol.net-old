@@ -11,6 +11,7 @@ We can use these contract chains to create and define concepts in our programs i
 
 At the heart of the Shelter Protocol is `SPMessage`, the building block for creating messages that are used to define both contracts and their actions. Each `SPMessage` is used to send one of the [opcodes](#opcodes) to the contract chain.
 
+{/* Refernce for the usage of '.src' attribute here: https://docs.astro.build/en/guides/images/#images-in-mdx-files */}
 <img src={spmessageRef.src} alt="Simple diagram showing two SPMessages, the first OP_CONTRACT, the next, OP_ACTION_ENCRYPTED" class="center" />
 
 The very first `SPMessage` in a contract chain defines the contract that's being created and sets its initial data. You can think of it as the constructor from OOP, being used to instantiate a class.
