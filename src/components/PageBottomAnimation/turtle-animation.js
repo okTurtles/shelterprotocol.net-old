@@ -1,7 +1,37 @@
-export function initTurtleAnimation(canvas) {
-  if (!canvas) { return }
+export function initTurtleAnimation(canvas, audio, extensionCount) {
+  if (!canvas || !audio) { return }
 
-  const glitch_canvas = canvas;
+  const flip = false;
+  const mouse = {x: 0, y: 0}
+  const turtlePixels = new Uint8Array(4);
+
+  let audioCtx, analyser, bufferLength, dataArray, mouseOver;
+  function init_audio() {
+    if(extensionCount.current != 7) return;
+    if(audioCtx) {
+      if(audio.paused) audio.play()
+      else audio.pause()
+      return
+    }
+    audio.loop = true;
+    audioCtx = new AudioContext();
+
+    const source = audioCtx.createMediaElementSource(audio);
+    var panner = audioCtx.createPanner();
+    source.connect(panner);
+    analyser = audioCtx.createAnalyser();
+    panner.connect(analyser)
+    analyser.connect(audioCtx.destination);
+
+    analyser.fftSize = 1024;
+    bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+
+    audio.src = "/sounds/best-time-112194.mp3"
+    audio.play()
+  }
+
+  const output_canvas = canvas;
   const base_canvas = document.createElement('canvas')
   function init_base_image() {
     const canvas = base_canvas;
@@ -14,10 +44,13 @@ export function initTurtleAnimation(canvas) {
         antialias: false,
         depth: false,
         stencil: false,
-        premultipliedAlpha: true,
+        premultipliedAlpha: false,
         preserveDrawingBuffer: true,
         failIfMajorPerformanceCaveat: false
       });
+
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flip);
+
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
 
     const vertexShaderSource = `
@@ -53,7 +86,10 @@ export function initTurtleAnimation(canvas) {
     precision lowp float;
     varying vec2 v_position;
     uniform float u_time;
+    uniform float u_beat;
+    uniform float u_pointer;
     uniform float u_scroll;
+    uniform float u_playing;
     uniform vec2 u_size;
     uniform sampler2D u_texture_debris_a;
     uniform sampler2D u_texture_debris_b;
@@ -95,7 +131,8 @@ export function initTurtleAnimation(canvas) {
         *((321.123+hex.z)*123.321+(123.321+hex.w)*321.123)
         +seed
         +length(hex.xy)*PI*E*(1.+(is_shell-is_head)*PI)
-        -time*(1.+PI*is_shell)), 1.);
+        -time*(1.+PI*is_shell)+
+        -u_beat*GR*PI*E), 1.);
     }
 
     mat2 rot(float x) {
@@ -103,7 +140,7 @@ export function initTurtleAnimation(canvas) {
     }
     vec3 fissure(vec2 p) {
       vec2 uv = p;
-      uv.y = -uv.y+u_scroll;
+      uv.y = -uv.y+u_scroll+1.5;
       // uv.y += (.5-cos(time/PI)*.5)*10.;
       float below = sign(uv.y)*.5+.5;
 
@@ -126,7 +163,7 @@ export function initTurtleAnimation(canvas) {
       float noise_left = crack_left/float(max_i);
       float noise_right = crack_right/float(max_i);
       float color = 1.-(max(-sign(uv.x-noise_left)*.5+.5, sign(uv.x-noise_right)*.5+.5));
-      uv0.y = p.y-min(-7.25+u_scroll, 0.);
+      uv0.y = p.y-min(-6.+u_scroll, 0.);
       return vec3(uv0, color*below);
     }
 
@@ -136,7 +173,7 @@ export function initTurtleAnimation(canvas) {
       return fract((m * sin((m * uv))));
     }
     vec4 rocks(vec2 uv) {
-      float min_y = 2.;
+      float min_y = 2.5;
       float max_y = 6.5;
       uv.y = (uv.y-min_y)/(max_y-min_y);
       vec2 uv1 = clamp(vec2(uv.x, uv.y*3.), vec2(0.), vec2(1.));
@@ -157,14 +194,17 @@ export function initTurtleAnimation(canvas) {
     {
       vec2 p0 = v_position.xy*.5+.5;
       vec4 crack = vec4(fissure(p0),1.);
+      // gl_FragColor = saw(crack); gl_FragColor.a = 1.; return; //For debugging scrolling.
       float swim = time*PI;
       vec2 uv = crack.xy;
 
       uv = uv*2.-1.;
 
-      uv.xy = uv.yx*E;
-      uv.x *= max(u_size.x/u_size.y, 1.);
-      uv.x *= max(u_size.y/u_size.x, 1.);
+      if(u_size.y > u_size.x) uv.xy = uv.yx;
+
+      uv.xy = uv.yx*(E)*max(1., u_size.y/u_size.x)/(1.+u_beat);
+      uv.x *= GR;
+      // uv.x *= max(1., u_size.y/u_size.x);
       // uv.x *= u_size.x/u_size.y*E;
       // uv.y *= GR;  
       vec2 uv0 = uv;
@@ -193,16 +233,17 @@ export function initTurtleAnimation(canvas) {
       vec4 pattern = fractal(final_uv, seed, gt0(shell), is_head, gt0(fin));
       vec4 rock = rocks(vec2(p0.x, crack.y));
       gl_FragColor = clamp(vec4(1.-rock.rgb, smoothstep(.5, .6, rock.a))+crack.z, vec4(0.),vec4(1.));
-      gl_FragColor.rgb = rock.a*(1.-clamp(gl_FragColor.rgb, vec3(0.), vec3(1.)))+(shell+fin+head)*(foreground*pattern.rgb);
+      gl_FragColor.rgb = rock.a*(1.-clamp(gl_FragColor.rgb, vec3(0.), vec3(1.)))+
+      (1.+u_pointer/E)*(shell+fin+head)*(foreground*pattern.rgb);
       vec2 affine = vec2(p0.x, 1.-p0.y)*2.-1.;
-      // affine.x *= max(u_size.x/u_size.y, u_size.y/u_size.x);
+      // affine.x *= MIN(1., u_size.y/u_size.x);
       affine += sin(vec2(time,
-        time))*32./max(u_size.x, u_size.y);
-      affine *= rot(time);
+        time))*8./max(u_size.x, u_size.y);
+      affine *= rot(time/PI);
       affine = saw(affine);
       vec4 back = texture2D(u_texture_back, affine)*
-      (smoothstep(5., 5.25, -.5-v_position.y*.5+u_scroll));;
-      gl_FragColor += back*(1.-smoothstep(0., .1, length(gl_FragColor.rgb)))/1.05;
+      (smoothstep(4.75, 5., -.5-v_position.y*.5+u_scroll))*u_playing;
+      gl_FragColor += back*(1.-smoothstep(0., .1, length(gl_FragColor.rgb)))/(1.05);
     }
     `
 
@@ -250,7 +291,10 @@ export function initTurtleAnimation(canvas) {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
     const timeUniformLocation = gl.getUniformLocation(shaderProgram, "u_time");
+    const pointerUniformLocation = gl.getUniformLocation(shaderProgram, "u_pointer");
+    const beatUniformLocation = gl.getUniformLocation(shaderProgram, "u_beat");
     const scrollUniformLocation = gl.getUniformLocation(shaderProgram, "u_scroll");
+    const playingUniformLocation = gl.getUniformLocation(shaderProgram, "u_playing");
     const sizeUniformLocation = gl.getUniformLocation(shaderProgram, "u_size");
 
     const startTime = (window.performance || Date).now();
@@ -297,6 +341,14 @@ export function initTurtleAnimation(canvas) {
     })
 
     function frame() {
+      let beat = 0;
+      if(audioCtx && analyser) {
+        analyser.getByteTimeDomainData(dataArray);
+        beat = Math.max(...dataArray)/255.
+      }
+      gl.uniform1f(beatUniformLocation, beat);
+      gl.uniform1f(pointerUniformLocation, mouseOver ? 1 : 0)
+      gl.uniform1f(playingUniformLocation, audio.paused ? 0: 1)
       canvas.width = document.body.clientWidth
       canvas.height = innerHeight
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -322,10 +374,17 @@ export function initTurtleAnimation(canvas) {
       gl.uniform1f(timeUniformLocation, ((window.performance || Date).now() - startTime) / 1000);
       gl.uniform2f(sizeUniformLocation, document.body.clientWidth
         , window.innerHeight);
-      gl.uniform1f(scrollUniformLocation, window.scrollY / innerHeight);
+      let scroll_offset = document.getElementById('grid-main').offsetHeight+
+        document.getElementsByTagName('header')[0].offsetHeight
+      scroll_offset = Math.max((window.scrollY-scroll_offset) / innerHeight, 0);
+      gl.uniform1f(scrollUniformLocation, scroll_offset);
 
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawElements(gl.TRIANGLES, NUM_INDICES, gl.UNSIGNED_SHORT, 0);
+      gl.flush()
+      gl.readPixels(mouse.x, window.innerHeight-mouse.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, turtlePixels);
+      mouseOver = ((turtlePixels[0]+turtlePixels[1]+turtlePixels[2])*turtlePixels[3] > 0)
+      output_canvas.style.cursor =  mouseOver ? 'pointer' : 'auto'
       requestAnimationFrame(frame);
     };
   }
@@ -342,10 +401,12 @@ export function initTurtleAnimation(canvas) {
         antialias: false,
         depth: false,
         stencil: false,
-        premultipliedAlpha: true,
+        premultipliedAlpha: false,
         preserveDrawingBuffer: true,
         failIfMajorPerformanceCaveat: false
       });
+
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flip);
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
 
     const vertexShaderSource = `
@@ -457,7 +518,7 @@ export function initTurtleAnimation(canvas) {
       float duration = .25;
       float is_glitch = smoothstep(period-duration, period-duration*.75, fract(u_time/period)*period)*
         smoothstep(1., 2., -.5-v_position.y*.5+u_scroll)*
-        (1.-smoothstep(5., 5.25, -.5-v_position.y*.5+u_scroll));
+        (1.-smoothstep(4.75, 5., -.5-v_position.y*.5+u_scroll));
       gl_FragColor = texture2D(u_texture_back, p0)*(1.-is_glitch)+is_glitch*glitch(p0)-1./32.;
     }
     `
@@ -541,14 +602,23 @@ export function initTurtleAnimation(canvas) {
       gl.uniform1f(timeUniformLocation, ((window.performance || Date).now() - startTime) / 1000);
       gl.uniform2f(sizeUniformLocation, document.body.clientWidth
         , window.innerHeight);
-      gl.uniform1f(scrollUniformLocation, window.scrollY / innerHeight);
-
+      const first_page_height = document.getElementById('grid-main').offsetHeight+
+        document.getElementsByTagName('header')[0].offsetHeight
+      const offset = Math.max((window.scrollY-first_page_height) / innerHeight, 0);
+      gl.uniform1f(scrollUniformLocation, offset);
+      if(audioCtx) audioCtx.listener.setPosition(0, Math.pow(offset-6, 2), 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawElements(gl.TRIANGLES, NUM_INDICES, gl.UNSIGNED_SHORT, 0);
       requestAnimationFrame(frame);
     })();
   }
+
   init_base_image()
   init_glitch_image()
+  canvas.onclick = init_audio
+  canvas.onmousemove = (e)=>{
+    mouse.x = e.x
+    mouse.y = e.y
+  }
 }
 

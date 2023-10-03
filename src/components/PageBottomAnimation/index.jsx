@@ -22,6 +22,7 @@ export default function BottomPageAnimation () {
   // local-state
   const rootEl = useRef(null) // A ref instance for the root el of this component
   const canvasEl = useRef(null)
+  const audioEl = useRef(null)
   const extensionCount = useRef(0)
   const timerId = useRef(null)
 
@@ -37,7 +38,7 @@ export default function BottomPageAnimation () {
 
         if (extensionCount.current === 1) {
           // initialize the turtle animation if this is the first time extending the page.
-          initTurtleAnimation(canvasEl.current)
+          initTurtleAnimation(canvasEl.current, audioEl.current, extensionCount)
         }
       }
     }, PAGE_EXTENSION_DELAY)
@@ -72,6 +73,7 @@ export default function BottomPageAnimation () {
   return (
     <div ref={rootEl} className='page-bottom-animation-container'>
       <canvas id='turtle-canvas' ref={canvasEl}></canvas>
+      <audio id='turtle-audio' ref={audioEl}></audio>
     </div>
   )
 }
