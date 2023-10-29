@@ -19,6 +19,7 @@
 .sl-block {
 	display: block;
 }
+
 @media (min-width: 50rem) {
 	.md\:sl-hidden {
 		display: none;
@@ -30,6 +31,7 @@
 		display: block;
 	}
 }
+
 @media (min-width: 72rem) {
 	.lg\:sl-hidden {
 		display: none;

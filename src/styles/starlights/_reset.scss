@@ -1,11 +1,11 @@
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
 * {
 	margin: 0;
+	box-sizing: border-box;
+
+	&::before,
+	&::after {
+		box-sizing: border-box;
+	}
 }
 
 html {
@@ -13,7 +13,7 @@ html {
 	accent-color: var(--sl-color-accent);
 }
 
-html[data-theme='light'] {
+:root.theme-dark {
 	color-scheme: light;
 }
 
