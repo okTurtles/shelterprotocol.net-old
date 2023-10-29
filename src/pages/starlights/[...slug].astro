@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content'
+import MainLayout from '../../layouts/StarlightsMainLayout.astro'
+
+export async function getStaticPaths () {
+  const docs = await getCollection('docs')
+
+  return docs.map(
+    (entry) => {
+      return {
+        params: { slug: entry.slug },
+        props: entry
+      }
+    }
+  )
+}
+
+const post = Astro.props
+const { Content, headings } = await post.render()
+---
+
+<MainLayout headings={headings}
+  pagePath={`starlights/${post.slug}`}
+  {...post.data}>
+  <Content />
+</MainLayout>

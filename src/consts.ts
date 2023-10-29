@@ -62,3 +62,7 @@ export const SIDEBAR: Sidebar = {
 		]
 	}
 }
+
+// NOTE: Below constant has been copied from 'constants.ts' file used in starlights theme.
+// 			 Remove it if it's used nowhere.
+export const PAGE_TITLE_ID = '_top';

@@ -1,0 +1,65 @@
+---
+// Built-in css styles
+import '../styles/starlights/starlights-main.scss'
+
+import HeadCommon from '../components/HeadCommon.astro'
+import HeadSEO from '../components/HeadSEO.astro'
+import PageFrame from '../components/starlights/PageFrame.astro'
+
+import { GITHUB_EDIT_URL, SITE } from '../consts.ts'
+
+const { headings, pagePath = '', ...data } = Astro.props
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+const includesPageBottomAnimation = [
+	'/authors'  // keeping it as a list in case the animation is added to mutiple pages.
+].some(pathSection => pagePath.endsWith(pathSection))
+
+---
+<html
+  dir={data.dir}
+  lang={data.lang}
+  data-has-sidebar={true}>
+  <head>
+    <HeadCommon />
+    <HeadSEO {...data} canonicalUrl={canonicalURL} />
+
+    <title>
+			{`${data.title} 🐢 ${SITE.title}`}
+		</title>
+
+    <style>
+      html:not([data-has-toc]) {
+				--sl-mobile-toc-height: 0rem;
+			}
+			html:not([data-has-sidebar]) {
+				--sl-content-width: 67.5rem;
+			}
+      /* Add scroll padding to ensure anchor headings aren't obscured by nav */
+			html {
+				/* Additional padding is needed to account for the mobile TOC */
+				scroll-padding-top: calc(1.5rem + var(--sl-nav-height) + var(--sl-mobile-toc-height));
+			}
+			main {
+				padding-bottom: 3vh;
+			}
+      @media (min-width: 50em) {
+				[data-has-sidebar] {
+					--sl-content-inline-start: var(--sl-sidebar-width);
+				}
+			}
+			@media (min-width: 72em) {
+				html {
+					scroll-padding-top: calc(1.5rem + var(--sl-nav-height));
+				}
+			}
+    </style>
+  </head>
+
+  <body class={includesPageBottomAnimation ? 'has-bottom-animation' : ''}>
+    <PageFrame {...Astro.props}>
+      <h1>Page Frame of Starlights theme</h1>
+
+      <slot />
+    </PageFrame>
+  </body>
+</html>
