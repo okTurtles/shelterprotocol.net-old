@@ -12,6 +12,18 @@ export default defineConfig({
 		mdx(),
 		starlight({
 			title: 'Shelter protocol',
+			defaultLocale: 'en',
+			editLink: {
+				baseUrl: 'https://github.com/okturtles/shelterprotocol.net/tree/master/'
+			},
+			logo: {
+				src: './public/images/logo.svg'
+			},
+			locales: {
+				en: {
+					label: 'English'
+				}
+			}
 		})
 	],
   vite: {
