@@ -23,7 +23,8 @@ export default defineConfig({
 				en: {
 					label: 'English'
 				}
-			}
+			},
+			lastUpdated: true
 		})
 	],
   vite: {
