@@ -1,3 +1,5 @@
+// reference: https://starlight.astro.build/guides/customization/#custom-fonts
+
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
@@ -6,4 +8,17 @@
   src:
     url('/fonts/SourceCodePro-Medium.otf') format("opentype"),
     url("/fonts/Icons/SourceCodePro-Medium.woff2") format("woff2");
+}
+
+pre {
+	 font-family: 'Source Code Pro';
+}
+
+.site-title {
+  gap: 8px;
+  
+  img {
+    height: 32px;
+    width: auto;
+  }
 }

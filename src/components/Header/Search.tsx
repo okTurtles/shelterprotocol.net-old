@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
 import { useState, useCallback } from 'preact/hooks';
-import '../../styles/stork-default.css';
+import '@/styles/stork-default.scss';
 import './Search.css';
 
 import { createPortal } from 'preact/compat';

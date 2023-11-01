@@ -215,7 +215,7 @@ dark: https://files.stork-search.net/releases/v1.6.0/dark.css
 
 /* dark-theme */
 
-:root.theme-dark .stork-wrapper {
+:root[data-theme="dark"] .stork-wrapper {
   --stork-blue-2: #a5d8ff;
 
   --stork-violet-4: #9775fa;

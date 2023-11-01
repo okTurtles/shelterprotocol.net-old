@@ -24,7 +24,51 @@ export default defineConfig({
 					label: 'English'
 				}
 			},
-			lastUpdated: true
+			lastUpdated: true,
+			customCss: [
+				'./src/styles/override-main.scss'
+			],
+			sidebar: [
+				// A group of links labelled "Guides".
+				{
+					label: 'Overview',
+					items: [
+						{ label: 'Introduction', link: '/en/introduction' },
+						{ label: 'Key Concepts', link: '/en/key-concepts' },
+						{ label: 'Multiple Devices', link: '/en/multi-device' },
+						{ label: 'Message Processing', link: '/en/message-processing' },
+						{ label: 'Federation', link: '/en/federation' },
+						{ label: 'Security', link: '/en/security' },
+						{ label: 'Implementations', link: '/en/implementations' }
+					]
+				},
+				{
+					label: 'Examples',
+					items: [
+						{ label: 'Identity Contract', link: '/en/identity-contract' },
+						{ label: 'Real-world Apps', link: '/en/usecases' }
+					]
+				},
+				{
+					label: 'Reference',
+					items: [
+						{ label: 'SPMessage', link: '/en/spmessage' },
+						{ label: 'Opcodes', link: '/en/opcodes' },
+						{ label: 'Server API', link: '/en/server-api' },
+						{ label: 'Invite Keys', link: '/en/invite-keys' },
+						{ label: 'Contract Manifests', link: '/en/contract-manifests' },
+						{ label: 'State Snapshots', link: '/en/state-snapshots' },
+						{ label: 'ZKPP', link: '/en/zkpp' }
+					]
+				},
+				{
+					label: 'About',
+					items: [
+						{ label: 'Authors', link: '/en/authors' },
+						{ label: 'History', link: '/en/history' }
+					]
+				}
+			]
 		})
 	],
   vite: {
