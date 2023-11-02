@@ -1,9 +1,3 @@
----
-import '../styles/theme.css';
-import '../styles/index.css';
-import '../styles/typography.css';
----
-
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
@@ -16,13 +10,16 @@ import '../styles/typography.css';
 <!-- Scrollable a11y code helper -->
 <script src="/make-scrollable-code-focusable.js" is:inline></script>
 
+<!-- Stork search -->
+<script is:inline src="/js/stork1.6.0/stork.js"></script>
+
 <!-- This is intentionally inlined to avoid FOUC -->
 <script is:inline>
 	const root = document.documentElement;
-	const theme = localStorage.getItem('theme');
+	const theme = localStorage.getItem('starlight-theme');
 	if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-		root.classList.add('theme-dark');
+		root.dataset.theme = 'dark';
 	} else {
-		root.classList.remove('theme-dark');
+		root.dataset.theme = 'light';
 	}
 </script>
