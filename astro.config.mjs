@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
 import mdx from '@astrojs/mdx';
-
 import starlight from "@astrojs/starlight";
+
+import { GITHUB_EDIT_URL } from './src/consts'
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
 			title: 'Shelter protocol',
 			defaultLocale: 'en',
 			editLink: {
-				baseUrl: 'https://github.com/okturtles/shelterprotocol.net/tree/master/'
+				baseUrl: GITHUB_EDIT_URL
 			},
 			logo: {
 				src: './public/images/logo.svg'
@@ -68,7 +69,10 @@ export default defineConfig({
 						{ label: 'History', link: '/en/history' }
 					]
 				}
-			]
+			],
+			components: {
+				Search: './src/components/search/Search.astro'
+			}
 		})
 	],
   vite: {

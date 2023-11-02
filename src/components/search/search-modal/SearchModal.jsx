@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import { memo } from 'preact/compat';
 import { classNames } from '../../../utils.ts'
 import { STORK } from '../../../consts.ts'
-import './SearchModal.css'
+import './SearchModal.scss'
 
 const { registrationName } = STORK
 /* This is a search-box modal component hooked up with stork-search(https://stork-search.net/docs) library */
