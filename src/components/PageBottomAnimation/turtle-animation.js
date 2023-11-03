@@ -374,8 +374,7 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
       gl.uniform1f(timeUniformLocation, ((window.performance || Date).now() - startTime) / 1000);
       gl.uniform2f(sizeUniformLocation, document.body.clientWidth
         , window.innerHeight);
-      let scroll_offset = document.getElementById('grid-main').offsetHeight+
-        document.getElementsByTagName('header')[0].offsetHeight
+      let scroll_offset = document.querySelector('.main-frame').offsetHeight
       scroll_offset = Math.max((window.scrollY-scroll_offset) / innerHeight, 0);
       gl.uniform1f(scrollUniformLocation, scroll_offset);
 
@@ -602,8 +601,7 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
       gl.uniform1f(timeUniformLocation, ((window.performance || Date).now() - startTime) / 1000);
       gl.uniform2f(sizeUniformLocation, document.body.clientWidth
         , window.innerHeight);
-      const first_page_height = document.getElementById('grid-main').offsetHeight+
-        document.getElementsByTagName('header')[0].offsetHeight
+      const first_page_height = document.querySelector('.main-frame').offsetHeight
       const offset = Math.max((window.scrollY-first_page_height) / innerHeight, 0);
       gl.uniform1f(scrollUniformLocation, offset);
       if(audioCtx) audioCtx.listener.setPosition(0, Math.pow(offset-6, 2), 0);

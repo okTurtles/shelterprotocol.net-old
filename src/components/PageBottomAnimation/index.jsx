@@ -1,6 +1,7 @@
 /** @jsxImportSource preact */
 
 import { useEffect, useRef } from 'preact/hooks'
+import { createPortal } from 'preact/compat';
 import { initTurtleAnimation } from './turtle-animation'
 import './PageBottomAnimation.scss'
 
@@ -18,7 +19,7 @@ const isPageFullyScrolled = () => {
     : true
 }
 
-export default function BottomPageAnimation () {
+function BottomPageAnimation () {
   // local-state
   const rootEl = useRef(null) // A ref instance for the root el of this component
   const canvasEl = useRef(null)
@@ -45,6 +46,7 @@ export default function BottomPageAnimation () {
   }
 
   const pageScrollHandler = (e) => {
+    console.log('@@  page scrolling!!')
     if (isPageFullyScrolled() &&
       extensionCount.current < PAGE_EXTENSION_MAX_COUNT) {
         extendPageAfterDelay()
@@ -60,6 +62,7 @@ export default function BottomPageAnimation () {
 
   // effects
   useEffect(() => {
+    console.log('@@ component mounted!!')
     window.addEventListener('scroll', pageScrollHandler)
     window.addEventListener('resize', pageResizeHandler)
     pageScrollHandler()
@@ -75,5 +78,14 @@ export default function BottomPageAnimation () {
       <canvas id='turtle-canvas' ref={canvasEl}></canvas>
       <audio id='turtle-audio' ref={audioEl}></audio>
     </div>
+  )
+}
+
+export default function Portal () {
+  return (
+    createPortal(
+      <BottomPageAnimation />,
+      document.body
+    )
   )
 }
