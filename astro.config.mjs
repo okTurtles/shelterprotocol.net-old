@@ -3,7 +3,7 @@ import preact from '@astrojs/preact';
 import mdx from '@astrojs/mdx';
 import starlight from "@astrojs/starlight";
 
-import { GITHUB_EDIT_URL } from './src/consts'
+import { GITHUB_EDIT_URL, COMMUNITY_INVITE_URL } from './src/consts'
 
 // https://astro.build/config
 export default defineConfig({
@@ -68,6 +68,12 @@ export default defineConfig({
 						{ label: 'Authors', link: '/en/authors' },
 						{ label: 'History', link: '/en/history' }
 					]
+				},
+				{ 
+					label: 'Join our community',
+					link: COMMUNITY_INVITE_URL,
+					attrs: { target: '_blank' },
+					badge: { text: 'Note', variant: 'note' }
 				}
 			],
 			components: {
