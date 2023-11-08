@@ -1,7 +1,7 @@
 ---
-import Default from '@astrojs/starlight/components/SocialIcons.astro';
 import HeadCommon from "./HeadCommon.astro";
+import HeadSEO from "./HeadSEO.astro";
 ---
 
-<Default {...Astro.props}><slot /></Default>
 <HeadCommon />
+<HeadSEO {...Astro.props} />

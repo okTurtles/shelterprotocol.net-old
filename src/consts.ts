@@ -9,8 +9,8 @@ export const SITE = {
 export const OPEN_GRAPH = {
 	image: {
 		// src: 'https://github.com/withastro/astro/blob/main/.github/assets/banner.png?raw=true',
-		src: '',
-		alt: ''
+		src: '/favicon.svg',
+		alt: 'Shelter protocol logo'
 	},
 	twitter: 'astrodotbuild'
 }
