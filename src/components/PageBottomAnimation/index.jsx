@@ -39,6 +39,7 @@ function BottomPageAnimation () {
 
         if (extensionCount.current === 1) {
           // initialize the turtle animation if this is the first time extending the page.
+          document.body.classList.add('has-easter-egg-animation')
           initTurtleAnimation(canvasEl.current, audioEl.current, extensionCount)
         }
       }
@@ -46,7 +47,6 @@ function BottomPageAnimation () {
   }
 
   const pageScrollHandler = (e) => {
-    console.log('@@  page scrolling!!')
     if (isPageFullyScrolled() &&
       extensionCount.current < PAGE_EXTENSION_MAX_COUNT) {
         extendPageAfterDelay()
@@ -62,7 +62,6 @@ function BottomPageAnimation () {
 
   // effects
   useEffect(() => {
-    console.log('@@ component mounted!!')
     window.addEventListener('scroll', pageScrollHandler)
     window.addEventListener('resize', pageResizeHandler)
     pageScrollHandler()
@@ -70,6 +69,8 @@ function BottomPageAnimation () {
     return () => { 
       window.removeEventListener('scroll', pageScrollHandler)
       window.removeEventListener('resize', pageResizeHandler)
+
+      document.body.classList.remove('has-easter-egg-animation')
     }
   }, [])
 

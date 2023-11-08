@@ -4,6 +4,7 @@ import { SITE, OPEN_GRAPH } from '@/consts';
 const { entry, slug } = Astro.props
 const pageFrontmatter = entry?.data || {} // reference: https://starlight.astro.build/reference/overrides/#entry
 const { title, description, image, ogLocale  } = pageFrontmatter
+
 const canonicalUrl = new URL(slug, Astro.site)
 const formattedContentTitle = `${title} 🚀 ${SITE.title}`
 const imageSrc = image?.src ?? OPEN_GRAPH.image.src
