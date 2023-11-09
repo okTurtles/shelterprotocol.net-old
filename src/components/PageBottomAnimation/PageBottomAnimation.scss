@@ -7,6 +7,11 @@
   width: 100%;
   overflow: hidden;
 
+  @media screen and (min-width: 50rem) {
+    width: calc(100% - 18.75rem); // 18.75rem (300px) here is the width of the sidebar menu
+    left: 18.75rem;
+  }
+
   &.is-active {
     overflow: initial;
 

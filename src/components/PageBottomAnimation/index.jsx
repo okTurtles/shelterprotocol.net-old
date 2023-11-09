@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'preact/hooks'
 import { createPortal } from 'preact/compat';
-import { initTurtleAnimation } from './turtle-animation'
+import { initTurtleAnimation, getPageContentWidth } from './turtle-animation'
 import './PageBottomAnimation.scss'
 
 const PAGE_EXTENSION_DELAY = 1000
@@ -54,8 +54,8 @@ function BottomPageAnimation () {
   }
 
   const pageResizeHandler = (e) => {
-    if (extensionCount.current > 0) { // if the animation is active, make sure to the canvas size is always the same as the viewport
-      canvasEl.current.width = document.body.clientWidth
+    if (extensionCount.current > 0) {
+      canvasEl.current.width = getPageContentWidth()
       canvasEl.current.height = innerHeight
     }
   }

@@ -1,3 +1,12 @@
+export function getPageContentWidth () {
+  const isSidebarShown = window.matchMedia('(min-width: 50rem)').matches
+  const pageWidth = document.body.clientWidth
+
+  return isSidebarShown
+    ? pageWidth - 300 // 300px (18.75rem) is the width of the sidebar
+    : pageWidth
+}
+
 export function initTurtleAnimation(canvas, audio, extensionCount) {
   if (!canvas || !audio) { return }
 
@@ -35,7 +44,7 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
   const base_canvas = document.createElement('canvas')
   function init_base_image() {
     const canvas = base_canvas;
-    canvas.width = document.body.clientWidth
+    canvas.width = getPageContentWidth()
     canvas.height = innerHeight
 
     const gl = canvas.getContext("webgl",
@@ -349,7 +358,7 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
       gl.uniform1f(beatUniformLocation, beat);
       gl.uniform1f(pointerUniformLocation, mouseOver ? 1 : 0)
       gl.uniform1f(playingUniformLocation, audio.paused ? 0: 1)
-      canvas.width = document.body.clientWidth
+      canvas.width = getPageContentWidth()
       canvas.height = innerHeight
       gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -372,8 +381,9 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
       
 
       gl.uniform1f(timeUniformLocation, ((window.performance || Date).now() - startTime) / 1000);
-      gl.uniform2f(sizeUniformLocation, document.body.clientWidth
-        , window.innerHeight);
+      gl.uniform2f(sizeUniformLocation,
+        getPageContentWidth(),
+        window.innerHeight);
       let scroll_offset = document.querySelector('.main-frame').offsetHeight
       scroll_offset = Math.max((window.scrollY-scroll_offset) / innerHeight, 0);
       gl.uniform1f(scrollUniformLocation, scroll_offset);
@@ -391,7 +401,7 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
   function init_glitch_image() {
     // NOTE: window.innerWidth doesn't account for the width of the scrollbar
     //       and leads to a bug where the unwanted horizontal scroll bar appears.
-    canvas.width = document.body.clientWidth
+    canvas.width = getPageContentWidth()
     canvas.height = innerHeight
 
     const gl = canvas.getContext("webgl",
@@ -582,7 +592,7 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
     const srcType = gl.UNSIGNED_BYTE;
 
     (function frame() {
-      canvas.width = document.body.clientWidth
+      canvas.width = getPageContentWidth()
       canvas.height = innerHeight
       gl.viewport(0, 0, canvas.width, canvas.height);
       const texNum = 0;
@@ -599,8 +609,9 @@ export function initTurtleAnimation(canvas, audio, extensionCount) {
       gl.uniform1i(textureUniformLocation, texNum);
 
       gl.uniform1f(timeUniformLocation, ((window.performance || Date).now() - startTime) / 1000);
-      gl.uniform2f(sizeUniformLocation, document.body.clientWidth
-        , window.innerHeight);
+      gl.uniform2f(sizeUniformLocation,
+        getPageContentWidth(),
+        window.innerHeight);
       const first_page_height = document.querySelector('.main-frame').offsetHeight
       const offset = Math.max((window.scrollY-first_page_height) / innerHeight, 0);
       gl.uniform1f(scrollUniformLocation, offset);
