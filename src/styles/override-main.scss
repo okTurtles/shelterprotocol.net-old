@@ -12,27 +12,6 @@
   margin: auto;
 }
 
-// body.has-easter-egg-animation {
-//   header.header,
-//   nav[aria-labelledby="starlight__on-this-page--mobile"],
-//   nav.sidebar button[aria-label="Menu"] {
-//     position: absolute;
-//   }
-
-//   #starlight__sidebar {
-//     position: absolute;
-//     height: 100%;
-//     bottom: 0;
-//   }
-  
-//   @media (min-width: 72rem) {
-//     .right-sidebar {
-//       position: absolute;
-//       padding-top: 0;
-//     }
-//   }
-// }
-
 body.has-easter-egg-animation {
   @media (min-width: 72rem) {
     .right-sidebar {
