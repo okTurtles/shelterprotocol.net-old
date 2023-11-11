@@ -7,8 +7,7 @@
     "start": "astro dev --port 4000",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "search-index:en": "stork build --input src/stork-config/en.toml --output public/search-index/index_en.st"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/mdx": "1.1.0",

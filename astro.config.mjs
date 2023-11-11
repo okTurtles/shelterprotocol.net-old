@@ -77,7 +77,6 @@ export default defineConfig({
 				}
 			],
 			components: {
-				Search: './src/components/search/Search.astro',
 				Head: './src/components/head-override/Head.astro'
 			}
 		})

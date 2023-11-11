@@ -24,10 +24,6 @@ export const GITHUB_EDIT_URL = 'https://github.com/okturtles/shelterprotocol.net
 
 export const COMMUNITY_INVITE_URL = 'https://join.slack.com/t/okturtles/shared_invite/zt-10jmpfgxj-tXQ1MKW7t8qqdyY6fB7uyQ'
 
-export const STORK = {
-	registrationName: 'shelterprotocol'
-}
-
 export type Sidebar = Record<
 	(typeof KNOWN_LANGUAGE_CODES)[number],
 	Record<string, { text: string; link: string }[]>
